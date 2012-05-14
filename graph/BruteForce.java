@@ -1,4 +1,4 @@
-package a3_v2;
+package graph;
 
 import java.util.ArrayList;
 import java.util.Collection;
