@@ -27,12 +27,7 @@ public class ACO {
 		List<IAnt> ants = new ArrayList<>();
 		double[][] dufts = new double[graph.getNumberOfVertices()][graph.getNumberOfVertices()];
                 resetPheroMatrix(dufts, 1);
-		int pheroMatrixTimeout = graph.getNumberOfVertices()*2;
-                int globalShortestStep = 0;
-                
 		List<Integer> shortestPath = null;
-		List<Integer> globalShortestPath = null;
-                int globalShortestPathLength = Integer.MAX_VALUE;
                 int shortestPathLength = Integer.MAX_VALUE;
                 double[][] tempPheroMat = new double[dufts.length][dufts.length];
 		while (stepcount < steps) {
@@ -71,14 +66,6 @@ public class ACO {
             for(int i = 0; i < mat.length; ++i) 
 			for(int j = 0; j < mat.length; ++j) 
 				mat[i][j] = val;            
-        }
-	
-	private double[][] initPheroMatrix(int vertexCount) {
-		double[][] mat = new double[vertexCount][vertexCount];
-		for(int i = 0; i < vertexCount; ++i) 
-			for(int j = 0; j < vertexCount; ++j) 
-				mat[i][j] = 1;
-		return mat;
         }
 	
 	private Map<Integer, Double> getPossibleWays(IGraph graph, IAnt ant, double[][] pheroMat) {
