@@ -1,4 +1,4 @@
-package ant_problem;
+package graph;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.Collection;
 
 public class BruteForce {
 
-	//TODO Kšnnen wir einen Graphen im Konstruktor Ÿbergeben? Oder ist das dann wieder nicht funktional oder wie auch immer?
-	// Also er kann dann ja nicht die einzelne Methode testen, also muss der egtl immer wieder mit Ÿbergeben werden oder?
+	//TODO Kï¿½nnen wir einen Graphen im Konstruktor ï¿½bergeben? Oder ist das dann wieder nicht funktional oder wie auch immer?
+	// Also er kann dann ja nicht die einzelne Methode testen, also muss der egtl immer wieder mit ï¿½bergeben werden oder?
 	public List<Integer> shortestPath(IGraph g, int start) {
 		List<Integer> vertices = new ArrayList<Integer>();
 		List<Integer> way = new ArrayList<Integer>();

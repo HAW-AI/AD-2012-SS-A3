@@ -79,8 +79,7 @@ public class ACO {
 			for(int j = 0; j < vertexCount; ++j) 
 				mat[i][j] = 1;
 		return mat;
-	}
-	
+        }
 	
 	private Map<Integer, Double> getPossibleWays(IGraph graph, IAnt ant, double[][] pheroMat) {
 		Map<Integer, Double> possibleWays = new HashMap<Integer, Double>();
@@ -122,7 +121,6 @@ public class ACO {
 		}
 		return pheroMatrix;
 	}
-
 	
 	int getPathLength(List<Integer> path, IGraph graph) {
 		int wayLength = 0;
@@ -135,5 +133,4 @@ public class ACO {
 	public double f(int weight, double phero) {
 		return Math.pow(weight,-1/*-2*/)*Math.pow(phero,1);
 	}
-	
 }
