@@ -6,7 +6,7 @@ import java.util.List;
 public interface IAnt {
 	
 	List<Integer> getPath();
-	int visitedVertices();
+	int numberOfVisitedVertices();
 	boolean hasVisited(int vertex);
 	void moveTo(int vertex);
 	int currentPosition();
@@ -24,7 +24,7 @@ class Ant implements IAnt {
 	}
 	
 	@Override
-	public int visitedVertices() {
+	public int numberOfVisitedVertices() {
 		return path.size();
 	}
 

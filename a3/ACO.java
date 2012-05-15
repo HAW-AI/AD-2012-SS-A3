@@ -13,7 +13,7 @@ public class ACO {
 	final int steps;
 	private final int SPAWN_RATE = 100;
 	private final double VAPORIZE_RATE = 0.5;
-        private Random rand = new Random(1337);
+    private Random rand = new Random(1337);
         
 	
 	public ACO(int antCount, int steps) {
@@ -22,73 +22,90 @@ public class ACO {
 	}	
 	
 	public List<Integer> shortestPath(IGraph graph, int start) {
-		int stepcount = 0;
-                int shortestStep = 0;
-		List<IAnt> ants = new ArrayList<>();
-		double[][] dufts = new double[graph.getNumberOfVertices()][graph.getNumberOfVertices()];
-                resetPheroMatrix(dufts, 1);
-		List<Integer> shortestPath = null;
-                int shortestPathLength = Integer.MAX_VALUE;
-                double[][] tempPheroMat = new double[dufts.length][dufts.length];
-		while (stepcount < steps) {
-                    if(ants.size() < maxAnts) {
-                        int times = Math.min(maxAnts-ants.size(),SPAWN_RATE);
-                        for(int i = 0; i < times;++i)
-                            ants.add(new Ant(start));
-                    }
-                    for(IAnt ant : ants) {
-                        if(ant.visitedVertices() == graph.getNumberOfVertices()) {
-                            ant.moveTo(start);
-                            int pathlength = getPathLength(ant.getPath(), graph);
-                            markPath(tempPheroMat, ant.getPath(), 1.0/pathlength);
-                            
-                            
-                            if (pathlength < shortestPathLength) {
-                                shortestStep = stepcount;
-                                shortestPathLength = pathlength;
-                                shortestPath = ant.getPath();
-                            }
-                            ant.reset();
-                        } else {
-                            int target = choosePath(ant, getPossibleWays(graph, ant, dufts));
-                            ant.moveTo(target);
-                        }
-                    }
-                    vaporize(dufts, tempPheroMat);
-                    resetPheroMatrix(tempPheroMat, 0);
-                    ++stepcount;
+		return shortestPath(graph,start,0);
+	}
+	
+	public List<Integer> shortestPath(IGraph graph, int start, int notifyInterval) {
+		int stepCount = 0;
+		int shortestPathLength = Integer.MAX_VALUE;
+		
+		List<IAnt> ants = new ArrayList<IAnt>();
+		List<Integer> shortestPath = new ArrayList<Integer>();
+	
+		double[][] pheroMatrix =initPheroMatrix(graph.getNumberOfVertices(),1);
+		double[][] tempPheroMatrix = initPheroMatrix(pheroMatrix.length, 0);
+		
+		while (stepCount < steps) {
+			if (notifyInterval > 0 && stepCount % notifyInterval == 0)
+				System.out.println("(" + stepCount + ") bisher kürzester Weg: " + shortestPath + " Länge: " + shortestPathLength);
+			
+			if(ants.size() < maxAnts)
+				ants.addAll(spawnAnts(ants.size(), start));
+
+			for(IAnt ant : ants) {
+				if(ant.numberOfVisitedVertices() == graph.getNumberOfVertices()) {
+					ant.moveTo(start);
+					int pathLength = getPathLength(ant.getPath(), graph);
+					markPath(tempPheroMatrix, ant.getPath(), 1.0/pathLength);
+
+					if (pathLength < shortestPathLength) {
+						shortestPathLength = pathLength;
+						shortestPath = ant.getPath();
+					}
+					ant.reset();
+				} else {
+					int target = choosePath(getRoutingMap(graph, ant, pheroMatrix));
+					ant.moveTo(target);
+				}
+			}
+			vaporize(pheroMatrix, tempPheroMatrix);
+			resetPheroMatrix(tempPheroMatrix, 0);
+			++stepCount;
 		}
-                System.out.print("Step: " + shortestStep+ " ");
 		return shortestPath;
 	}
-        
-        private void resetPheroMatrix(double[][] mat, double val) {
-            for(int i = 0; i < mat.length; ++i) 
-			for(int j = 0; j < mat.length; ++j) 
-				mat[i][j] = val;            
-        }
 	
-	private Map<Integer, Double> getPossibleWays(IGraph graph, IAnt ant, double[][] pheroMat) {
-		Map<Integer, Double> possibleWays = new HashMap<Integer, Double>();
-		double sumKram = 0;
-		for(int vertex=0;vertex < graph.getNumberOfVertices();++vertex) {
-			if(!ant.hasVisited(vertex)) {
-				double ret = f(graph.getEdgeWeighting(ant.currentPosition(),vertex),pheroMat[ant.currentPosition()][vertex]);
-				sumKram += ret;
-				possibleWays.put(vertex,ret);
-			}
-		}
-		for(int vertex : possibleWays.keySet()) {
-			possibleWays.put(vertex,possibleWays.get(vertex)/sumKram/*epic name*//**/);
-		}
-		return possibleWays;
+	private List<IAnt> spawnAnts(int currentAntCount, int start) {
+		int spawnCount = Math.min(maxAnts-currentAntCount,SPAWN_RATE);
+		List<IAnt> ants = new ArrayList<IAnt>();
+		for(int i = 0; i < spawnCount;++i)
+			ants.add(new Ant(start));
+		return ants;
 	}
 	
-	private int choosePath(IAnt ant, Map<Integer,Double> possibleWays) {
+	private double[][] initPheroMatrix(int size, double val) {
+		return resetPheroMatrix(new double[size][size],val);
+	}
+        
+	private double[][] resetPheroMatrix(double[][] mat, double val) {
+		for(int i = 0; i < mat.length; ++i) 
+			for(int j = 0; j < mat.length; ++j) 
+				mat[i][j] = val;          
+		return mat;
+	}
+	
+	private Map<Integer, Double> getRoutingMap(IGraph graph, IAnt ant, double[][] pheroMat) {
+		Map<Integer, Double> routingMap = new HashMap<Integer, Double>();
+		double totalValue = 0;
+		int currentPosition = ant.currentPosition();
+		for(int vertex=0;vertex < graph.getNumberOfVertices();++vertex) {
+			if(!ant.hasVisited(vertex)) {				
+				double routingValue = determineRoutingValue(graph.edgeWeight(currentPosition,vertex),pheroMat[currentPosition][vertex]);
+				totalValue += routingValue;
+				routingMap.put(vertex,routingValue);
+			}
+		}
+		for(int vertex : routingMap.keySet()) {
+			routingMap.put(vertex,routingMap.get(vertex)/totalValue);
+		}
+		return routingMap;
+	}
+	
+	private int choosePath(Map<Integer,Double> routingMap) {
 		double currentSum = 0;
 		double rand = this.rand.nextDouble();
-		for(int vertex : possibleWays.keySet()) {
-			if((currentSum+=possibleWays.get(vertex)) >= rand) {
+		for(int vertex : routingMap.keySet()) {
+			if((currentSum+=routingMap.get(vertex)) >= rand) {
 				return vertex;
 			}
 		}
@@ -102,9 +119,9 @@ public class ACO {
 		return pheroMatrix;
 	}
 	
-	private double[][] markPath(double[][] pheroMatrix, List<Integer> path, double value/*to Increment*/) {
+	private double[][] markPath(double[][] pheroMatrix, List<Integer> path, double phero) {
 		for(int i = 0; i < path.size()-1; ++i) {
-			pheroMatrix[path.get(i)][path.get(i+1)] += value;
+			pheroMatrix[path.get(i)][path.get(i+1)] += phero;
 		}
 		return pheroMatrix;
 	}
@@ -112,12 +129,12 @@ public class ACO {
 	int getPathLength(List<Integer> path, IGraph graph) {
 		int wayLength = 0;
 		for(int i = 0; i < path.size()-1; ++i) {
-			wayLength += graph.getEdgeWeighting(path.get(i), path.get(i+1));
+			wayLength += graph.edgeWeight(path.get(i), path.get(i+1));
 		}
 		return wayLength;
 	}
 	
-	public double f(int weight, double phero) {
-		return Math.pow(weight,-1/*-2*/)*Math.pow(phero,1);
+	public double determineRoutingValue(int weight, double phero) {
+		return phero/weight;
 	}
 }

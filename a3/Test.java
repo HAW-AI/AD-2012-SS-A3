@@ -10,7 +10,7 @@ public class Test {
     private final static int RUNS = 20;
     private final static int STEPS = 300;
     private final static int ANTS = 1500;
-    private final static int GRAPH = 5;
+    private final static int GRAPH = 21;
     
     public static void main(String ... args) {
         IOManager io = new IOManager("src\\simGraph("+ GRAPH +").txt");

@@ -6,6 +6,6 @@ public interface IGraph {
 	 * 
 	 * @preConditions vert1, vert2 >= 0 & vert1, vert2 < Anzahl Knoten
 	 */
-	int getEdgeWeighting(int vert1, int vert2);
+	int edgeWeight(int vert1, int vert2);
         int getNumberOfVertices();
 }

@@ -10,7 +10,7 @@ public class GraphImpl implements IGraph {
 	}
 
 	@Override
-	public int getEdgeWeighting(int vert1, int vert2) {
+	public int edgeWeight(int vert1, int vert2) {
 		// Pr�fung auf g�ltigen Wertebereich
 		if (vert1 < 0 || vert2 < 0 || vert1 >= distanceMatrix.length || vert2 >= distanceMatrix.length)
 			return 0;
