@@ -8,12 +8,6 @@ public final class GraphFactory {
     }
 
     /**
-     * Erstellt einen Gerichteten, unvollständigen Zufälligen GraphenGraphen aus
-     * einer Distanzmatrix
-     *
-     * @preConditions keine
-     */
-    /**
      * Erstellt einen Graphen aus einer Distanzmatrix
      *
      * @preConditions alle Werte der Matrix x | x > 0 <br> distanceMatrix muss
@@ -62,16 +56,10 @@ public final class GraphFactory {
         // Alle werte müssen größer gleich -1 sein, Hauptdiagonale muss 0 sein
         for (int i = 0; i < distanceMatrix.length; i += 1) {
             for (int j = i; j < distanceMatrix.length; j += 1) {
-                if (dMatrix[(distanceMatrix.length * i + j)] < -1) {
+                if (dMatrix[(distanceMatrix.length * i + j)] < -1 || ((i==j) && dMatrix[(distanceMatrix.length * i + j)]!=0 )){
                     return createNormalizedGraph(3);
                 }
-                  if(i==j) {
-                    if(dMatrix[(distanceMatrix.length * i + j)]!=0) {
-                        return createNormalizedGraph(3);
-                    }
-                }
-                
-            }
+             }
         }
         return new GraphImpl(dMatrix);
     }
