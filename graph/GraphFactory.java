@@ -1,81 +1,134 @@
 package graph;
+
+import java.util.Random;
+
 public final class GraphFactory {
-	private GraphFactory() {
-	}
 
-	/**
-	 * Erstellt einen Graphen aus einer Distanzmatrix
-	 * 
-	 * @preConditions alle Werte der Matrix x | x > 0 <br>
-	 *                distanceMatrix muss quadratisch sein <br>
-	 *                distanceMatrix muss symmetrisch sein <br>
-	 *                alle Werte der Hauptdiagonalen m�ssen den Wert 0 besitzen <br>
-	 *                ansonsten wird ein normalisierter Graph der Größe 3
-	 *                erstellt
-	 */
-	public static IGraph createGraph(int[][] distanceMatrix) {
-		// Prüfung ob gültige Arrays erstellt werden!!!
-		// Es muss eine quadratische Matrix sein
-		if (distanceMatrix.length != distanceMatrix[0].length)
-			return createNormalizedGraph(3);
+    private GraphFactory() {
+    }
 
-		// Alle werte m�ssen positiv sein und die Matrix muss symmetrisch sein
-		for (int i = 0; i < distanceMatrix.length; i += 1)
-			for (int j = i; j < distanceMatrix.length; j += 1)
-				if (distanceMatrix[i][j] < 0 || distanceMatrix[i][j] != distanceMatrix[j][i] || (i == j && distanceMatrix[i][j] != 0))
-					return createNormalizedGraph(3);
+    /**
+     * Erstellt einen Gerichteten, unvollständigen Zufälligen GraphenGraphen aus
+     * einer Distanzmatrix
+     *
+     * @preConditions keine
+     */
+    /**
+     * Erstellt einen Graphen aus einer Distanzmatrix
+     *
+     * @preConditions alle Werte der Matrix x | x > 0 <br> distanceMatrix muss
+     * quadratisch sein <br> distanceMatrix muss symmetrisch sein <br> alle
+     * Werte der Hauptdiagonalen mï¿½ssen den Wert 0 besitzen <br> ansonsten
+     * wird ein normalisierter Graph der GrÃ¶ÃŸe 3 erstellt
+     */
+    public static IGraph createGraph(int[][] distanceMatrix) {
+        // int[] Matrix erzeugen
+        int[] dMatrix = new int[distanceMatrix.length * distanceMatrix.length];
+        for (int i = 0; i < distanceMatrix.length; i += 1) {
+            for (int j = 0; j < distanceMatrix.length; j += 1) {
+                dMatrix[(distanceMatrix.length * i + j)] = distanceMatrix[i][j];
+            }
+        }
 
-		return new GraphImpl(distanceMatrix);
-	}
+        // Alle werte müssen positiv sein und die Matrix muss symmetrisch sein
+        for (int i = 0; i < distanceMatrix.length; i += 1) {
+            for (int j = i; j < distanceMatrix.length; j += 1) {
+                if (dMatrix[(distanceMatrix.length * i + j)] < 0
+                        || dMatrix[(distanceMatrix.length * i + j)] != dMatrix[(distanceMatrix.length * j + i)]
+                        || (i == j && dMatrix[(distanceMatrix.length * i + j)] != 0)) {
+                    return createNormalizedGraph(3);
+                }
+            }
+        }
+        return new GraphImpl(dMatrix);
+    }
+    
+    /**
+     * Erstellt einen DiGraphen aus einer Distanzmatrix
+     *
+     * @preConditions alle Werte der Matrix x | x > -1 <br> distanceMatrix muss
+     * quadratisch sein <br> alle  Werte der Hauptdiagonalen müssen den Wert 0 besitzen <br> ansonsten
+     * wird ein normalisierter Graph der Größe 3 erstellt
+     */
+    public static IGraph createDiGraph(int[][] distanceMatrix) {
+        // int[] Matrix erzeugen
+        int[] dMatrix = new int[distanceMatrix.length * distanceMatrix.length];
+        for (int i = 0; i < distanceMatrix.length; i += 1) {
+            for (int j = 0; j < distanceMatrix.length; j += 1) {
+                dMatrix[(distanceMatrix.length * i + j)] = distanceMatrix[i][j];
+            }
+        }
 
-	/**
-	 * Erstellt einen symmetrischen Graphen mit zuf�llig generierten
-	 * Kantengewichtung im Bereich von 1-100
-	 * 
-	 * @preConditions es muss gelten: numberOfVertices >= 3 <br>
-	 *                ansonsten wird 3 als Standardwert angenommen
-	 */
-	public static IGraph createRandomGraph(int numberOfVertices) {
-		// Pr�fung auf g�ltige Werten, ansonsten Standardwert
-		if (numberOfVertices < 3)
-			numberOfVertices = 3;
+        // Alle werte müssen größer gleich -1 sein, Hauptdiagonale muss 0 sein
+        for (int i = 0; i < distanceMatrix.length; i += 1) {
+            for (int j = i; j < distanceMatrix.length; j += 1) {
+                if (dMatrix[(distanceMatrix.length * i + j)] < -1) {
+                    return createNormalizedGraph(3);
+                }
+                  if(i==j) {
+                    if(dMatrix[(distanceMatrix.length * i + j)]!=0) {
+                        return createNormalizedGraph(3);
+                    }
+                }
+                
+            }
+        }
+        return new GraphImpl(dMatrix);
+    }
 
-		int[][] distanceMatrix = new int[numberOfVertices][numberOfVertices];
+    /**
+     * Erstellt einen symmetrischen Graphen mit zufï¿½llig generierten
+     * Kantengewichtung im Bereich von 1-100
+     *
+     * @preConditions es muss gelten: numberOfVertices >= 3 <br> ansonsten wird
+     * 3 als Standardwert angenommen
+     */
+    public static IGraph createRandomGraph(int numberOfVertices, long randSeed) {
+        Random rand = new Random(randSeed);
+        // Prï¿½fung auf gï¿½ltige Werten, ansonsten Standardwert
+        if (numberOfVertices < 3) {
+            numberOfVertices = 3;
+        }
 
-		for (int i = 0; i < numberOfVertices; i += 1)
-			for (int j = i; j < numberOfVertices; j += 1) {
-				if (i == j)
-					distanceMatrix[i][j] = 0;
-				else {
-					distanceMatrix[i][j] = (int) (Math.random() * 100) + 1;
-					distanceMatrix[j][i] = distanceMatrix[i][j];
-				}
-			}
+        int[] distanceMatrix = new int[numberOfVertices * numberOfVertices];
 
-		return new GraphImpl(distanceMatrix);
-	}
+        for (int i = 0; i < numberOfVertices; i += 1) {
+            for (int j = i; j < numberOfVertices; j += 1) {
+                if (i == j) {
+                    distanceMatrix[(numberOfVertices * i + j)] = 0;
+                } else {
+                    distanceMatrix[(numberOfVertices * i + j)] = rand.nextInt(100) + 1;
+                    distanceMatrix[(numberOfVertices * j + i)] = distanceMatrix[(numberOfVertices * i + j)];
+                }
+            }
+        }
 
-	/**
-	 * Erstellt symmetrischen Graphen mit einer konstanten Kantengewichtung <br>
-	 * Die Gewichtung wird durch die Differenz zweier Knoten bestimmt <br>
-	 * z.B. distance(1,2) = 1; distance(1,4) = 3; etc.
-	 * 
-	 * @preConditions es muss gelten: numberOfVertices >= 3 <br>
-	 *                ansonsten wird 3 als Standardwert angenommen
-	 */
-	public static IGraph createNormalizedGraph(int numberOfVertices) {
-		// Pr�fung auf g�ltige Werten, ansonsten Standardwert
-		if (numberOfVertices < 3)
-			numberOfVertices = 3;
+        return new GraphImpl(distanceMatrix);
+    }
 
-		int[][] distanceMatrix = new int[numberOfVertices][numberOfVertices];
+    /**
+     * Erstellt symmetrischen Graphen mit einer konstanten Kantengewichtung <br>
+     * Die Gewichtung wird durch die Differenz zweier Knoten bestimmt <br> z.B.
+     * distance(1,2) = 1; distance(1,4) = 3; etc.
+     *
+     * @preConditions es muss gelten: numberOfVertices >= 3 <br> ansonsten wird
+     * 3 als Standardwert angenommen
+     */
+    public static IGraph createNormalizedGraph(int numberOfVertices) {
+        // Prüfung auf gültige Werten, ansonsten Standardwert
+        if (numberOfVertices < 3) {
+            numberOfVertices = 3;
+        }
 
-		for (int i = 0; i < numberOfVertices; i += 1)
-			for (int j = i; j < numberOfVertices; j += 1) {
-				distanceMatrix[i][j] = j - i;
-				distanceMatrix[j][i] = distanceMatrix[i][j];
-			}
+        int[] distanceMatrix = new int[numberOfVertices * numberOfVertices];
 
-		return new GraphImpl(distanceMatrix);
-	}
+        for (int i = 0; i < numberOfVertices; i += 1) {
+            for (int j = i; j < numberOfVertices; j += 1) {
+                distanceMatrix[(numberOfVertices * i + j)] = j - i;
+                distanceMatrix[(numberOfVertices * j + i)] = distanceMatrix[(numberOfVertices * i + j)];
+            }
+        }
+
+        return new GraphImpl(distanceMatrix);
+    }
 }

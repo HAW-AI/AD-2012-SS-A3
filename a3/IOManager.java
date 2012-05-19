@@ -1,13 +1,8 @@
 package a3;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.sql.Timestamp;
+import java.util.Random;
 
 public class IOManager {
 	private final File logFile;
@@ -124,5 +119,45 @@ public class IOManager {
 	public void logToConsole(String logString) {
 		System.out.println(logString);
 	}
-
+        
+	/**
+	 * Erzeugt eine vollständige oder unvollständige unsymetrische zufällige Distanzmatrix.
+	 * @preConditions maxdistance >=1
+	 * @param seed
+	 *            Der Seed der für den Aufruf von Random benutzt werden soll
+         * @param maxdistance
+         *           Maximale Entfernung zwischen den Kanten
+         * @param size
+         *           Anzahl der gewünschten Zeilen und Spalten
+         * @param chanceofcorrupted
+         *          Wahrscheinlichkeit mit der Kanten im Graphen mit -1 belegt werden sollen
+         *          Bei 0, entsteht ein vollständiger unsymetrischer Graph
+         *          Bei !=0, entsteht ein unvollständiger unsymetrischer Graph
+	 */        
+        
+        public static int[][] RandomDistanceMatrix(int seed,  int maxdistance,int size,double chanceofcorrupted ) {
+             Random rand = new Random(seed);
+             int[][] result = new int[size][size];
+             // Wertepoole erzeugen
+             int[] pool = new int [maxdistance+(int) (chanceofcorrupted*maxdistance)];
+             
+            for (int i = 0;i<(maxdistance);i++) {
+                pool[i]=-1;
+           }
+            
+           for (int i = maxdistance;i<(int) (maxdistance+chanceofcorrupted*maxdistance);i++) {
+                 pool[i]=i+1-maxdistance;
+            }           
+             for (int i = 0;size > i;i++) {
+                 for (int j = 0; size > j;j++) {
+                     if (i==j){    result[i][j]=0;}
+                     else
+                     {
+                         int ran = (int) (rand.nextDouble()*pool.length);
+                         result[i][j]=pool[ran];
+                     }
+                 }
+             }
+           return result;
+        }
 }

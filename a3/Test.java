@@ -3,7 +3,6 @@ package a3;
 import graph.GraphFactory;
 import graph.IGraph;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Test {
@@ -12,7 +11,7 @@ public class Test {
     private final static int ANTS = 1500;
     private final static int GRAPH = 21;
     
-    public static void main(String ... args) {
+    public static void main(String[] args) {
         IOManager io = new IOManager("src\\simGraph("+ GRAPH +").txt");
         //IGraph g = GraphFactory.createRandomGraph(12);
         //IGraph g = GraphFactory.createNormalizedGraph(30);

@@ -1,32 +1,41 @@
 package graph;
+
 import java.util.Arrays;
 
 public class GraphImpl implements IGraph {
 
-	private final int[][] distanceMatrix;
+	private final int[] distanceMatrix;
 
-	GraphImpl(int[][] distanceMatrix) {
+	GraphImpl(int[] distanceMatrix) {
 		this.distanceMatrix = distanceMatrix;
 	}
 
 	@Override
 	public int edgeWeight(int vert1, int vert2) {
-		// Pr�fung auf g�ltigen Wertebereich
-		if (vert1 < 0 || vert2 < 0 || vert1 >= distanceMatrix.length || vert2 >= distanceMatrix.length)
+		// Prï¿½fung auf gï¿½ltigen Wertebereich
+		int size = getNumberOfVertices();
+		if ((vert1 < -1) || (vert2 < -1) || (vert1 >= size) || (vert2 >= size))
 			return 0;
 		else
-			return distanceMatrix[vert1][vert2];
+			return distanceMatrix[(vert1 * size + vert2)];
 	}
 
 	@Override
 	public String toString() {
 		String s = "";
-		for (int i = 0; i < distanceMatrix.length; i += 1) {
-			s += Arrays.toString(distanceMatrix[i]);
-			if (i != distanceMatrix.length - 1)
-				s += "\n";
-		}
+		int size = getNumberOfVertices();
+		for (int i = 0; i < size; i += 1)
+			for (int j = 0; j < size; j += 1) {
+
+				if (j == size - 1)
+					s += distanceMatrix[(size * i + j)] + "]\n";
+				else if (j == 0)
+					s += "[" + distanceMatrix[(size * i + j)] + ", ";
+				else
+					s += distanceMatrix[(size * i + j)] + ", ";
+			}
 		return s;
+
 	}
 
 	@Override
@@ -48,9 +57,9 @@ public class GraphImpl implements IGraph {
 		return true;
 	}
 
-    @Override
-    public int getNumberOfVertices() {
-        return distanceMatrix.length;
-    }
+	@Override
+	public int getNumberOfVertices() {
+		return (int) Math.sqrt(distanceMatrix.length);
+	}
 
 }

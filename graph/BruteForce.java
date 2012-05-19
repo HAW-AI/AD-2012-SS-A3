@@ -6,7 +6,7 @@ import java.util.List;
 
 public class BruteForce {
 
-	 public static List<Integer> shortestPath(IGraph g, int start) {
+	public static List<Integer> shortestPath(IGraph g, int start) {
 		List<Integer> vertices = new ArrayList<Integer>();
 		List<Integer> way = new ArrayList<Integer>();
 		for (int i = 0; i < g.getNumberOfVertices(); i++) {
@@ -35,7 +35,7 @@ public class BruteForce {
 		for (int i : vertices) {
 			verts.clear();
 			verts.addAll(vertices);
-			((Collection<Integer>)verts).remove(i);
+			((Collection<Integer>) verts).remove(i);
 			pathToTry.clear();
 			pathToTry.addAll(way);
 			pathToTry.add(i);

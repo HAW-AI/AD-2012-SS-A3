@@ -1,4 +1,7 @@
 package graph;
+
+import java.util.Set;
+
 public interface IGraph {
 	/**
 	 * Gibt die Distanz zwischen zwei Knoten im Graphen zur�ck <br>
@@ -7,5 +10,8 @@ public interface IGraph {
 	 * @preConditions vert1, vert2 >= 0 & vert1, vert2 < Anzahl Knoten
 	 */
 	int edgeWeight(int vert1, int vert2);
-        int getNumberOfVertices();
+
+	int getNumberOfVertices();
+
+	Set<Integer> getneighbours(int Vertex);
 }
