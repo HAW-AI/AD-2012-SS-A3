@@ -134,7 +134,7 @@ public class IOManager {
          * @param chanceofcorrupted
          *          Wahrscheinlichkeit mit der Kanten im Graphen mit -1 belegt werden sollen
          *          Bei 0, entsteht ein vollständiger unsymetrischer Graph
-         *          Bei !=0, entsteht ein unvollständiger unsymetrischer Graph
+         *          Bei >0, entsteht ein unvollständiger unsymetrischer Graph
 	 */        
         
         public static int[][] RandomDistanceMatrix(int seed,  int maxdistance,int size,double chanceofcorrupted ) {
@@ -163,7 +163,7 @@ public class IOManager {
            return result;
         }
         /**
-     * Liest einen Matrix im als Digraph ein
+     * Liest eine Matrix als Digraph ein
      *
      * @return Es wird ein quadratisches int[][] zurückgegeben
      * <br> falls ein Fehler auftritt, wird ein normalisierter Graph der Größe 3
