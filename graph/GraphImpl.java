@@ -1,6 +1,8 @@
 package graph;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GraphImpl implements IGraph {
 
@@ -14,7 +16,7 @@ public class GraphImpl implements IGraph {
 	public int edgeWeight(int vert1, int vert2) {
 		// Prï¿½fung auf gï¿½ltigen Wertebereich
 		int size = getNumberOfVertices();
-		if ((vert1 < -1) || (vert2 < -1) || (vert1 >= size) || (vert2 >= size))
+		if ((vert1 < 0) || (vert2 < 0) || (vert1 >= size) || (vert2 >= size))
 			return 0;
 		else
 			return distanceMatrix[(vert1 * size + vert2)];
@@ -60,6 +62,18 @@ public class GraphImpl implements IGraph {
 	@Override
 	public int getNumberOfVertices() {
 		return (int) Math.sqrt(distanceMatrix.length);
+	}
+	
+	@Override
+	public Set<Integer> reachableAdjacencyVerticesOf(int vertice) {
+		Set<Integer> reachable = new HashSet<Integer>();
+		int size = getNumberOfVertices();
+		for (int i = 0; i < size; i++){
+			int check = distanceMatrix[(size * vertice + i)];
+			if(check > 0 && vertice != i)
+					reachable.add(i);
+			}
+		return reachable;
 	}
 
 }

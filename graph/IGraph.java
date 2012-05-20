@@ -13,5 +13,10 @@ public interface IGraph {
 
 	int getNumberOfVertices();
 
-	Set<Integer> getneighbours(int Vertex);
+//	Set<Integer> getneighbours(int Vertex);
+	Set<Integer> reachableAdjacencyVerticesOf(int vertice);
+	
+	//Für weiter Optimierung des Alg, ev nützlich
+//	int inDegreeOf(int vertice);
+//	int outDegreeOf(int vertice);
 }
