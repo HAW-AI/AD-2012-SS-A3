@@ -2,6 +2,8 @@ package a3;
 
 import java.io.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class IOManager {
@@ -160,4 +162,62 @@ public class IOManager {
              }
            return result;
         }
+        /**
+     * Liest einen Matrix im als Digraph ein
+     *
+     * @return Es wird ein quadratisches int[][] zurückgegeben
+     * <br> falls ein Fehler auftritt, wird ein normalisierter Graph der Größe 3
+     * zurückgegeben
+     */
+    public int[][] readDigraphMatrix() {
+
+        int[][] failMatrix = {{0, 1, 2}, {1, 0, 1}, {2, 1, 0}};
+        try {
+            BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(filePath)));
+            try {
+                String s;
+                // -- Folgender Codeblock sucht den Anfang der EDGE_WEIGHT_SECTION
+                do {
+                    s = input.readLine();
+                } while (s != null && !s.contains("EDGE_WEIGHT_SECTION"));
+
+                // -- Folgender Codeblock sucht das Ende der EDGE_WEIGHT_SECTION
+                // -- Markierung ist EOF
+                // -- und speicert alle Zeilen mit Informationen zu Kantenlängen
+                // -- in einer Liste
+                List<String> l = new ArrayList<String>();
+                StringBuilder sb = new StringBuilder();
+                s = input.readLine();
+                while (s != null && !s.trim().equals("EOF")) {
+                    sb.append(s);
+                    int index = sb.indexOf("  ");
+                    while (index >= 0) {
+                        sb.deleteCharAt(index);
+                        index = sb.indexOf("  ");
+                    }
+                    l.add(sb.toString());
+                    sb.delete(0, sb.length());
+                    s = input.readLine();
+                }
+
+                int[][] matrix = new int[l.size()][l.size()];
+                String[] elem;
+
+                for (int i = 0; i < matrix.length; i++) {
+                    elem = l.get(i).split(" ");
+                    for (int j = 0; j < elem.length; j++) {
+                        matrix[i][j] = Integer.parseInt(elem[j]);
+                    }
+                }
+                input.close();
+                return matrix;
+            } catch (IOException e) {
+                System.out.println("IOException: " + e.getMessage());
+                return failMatrix;
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found!");
+            return failMatrix;
+        }
+    }
 }
