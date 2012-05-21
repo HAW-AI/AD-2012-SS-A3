@@ -2,18 +2,22 @@ package graph;
 
 import java.util.Random;
 
+/**
+ * Klasse zur Erstellung von Graphen aus Distanzmatrizen oder mit Zufallswerten.
+ */
 public final class GraphFactory {
 
     private GraphFactory() {
     }
 
     /**
-     * Erstellt einen Graphen aus einer Distanzmatrix
-     *
-     * @preConditions alle Werte der Matrix x | x > 0 <br> distanceMatrix muss
-     * quadratisch sein <br> distanceMatrix muss symmetrisch sein <br> alle
-     * Werte der Hauptdiagonalen mÃ¯Â¿Â½ssen den Wert 0 besitzen <br> ansonsten
-     * wird ein normalisierter Graph der GrÃƒÂ¶ÃƒÅ¸e 3 erstellt
+     * Erstellt einen Graphen aus einer Distanzmatrix..
+     * @preCondition alle Werte der Matrix x | x > 0
+     * @preCondition distanceMatrix muss quadratisch sein
+     * @preCondition distanceMatrix muss symmetrisch sein
+     * @preCondition alle Werte der Hauptdiagonalen müssen den Wert 0 besitzen
+     * @param distanceMatrix	Distanzmatrix
+     * @return erzeugter Graph (normalisierter Graph der Größe 3, falls die preConditions nicht erfüllt wurden)
      */
     public static IGraph createGraph(int[][] distanceMatrix) {
         // int[] Matrix erzeugen
@@ -24,7 +28,7 @@ public final class GraphFactory {
             }
         }
 
-        // Alle werte mÃ¼ssen positiv sein und die Matrix muss symmetrisch sein
+        // Alle Werte müssen positiv sein, die Matrix muss symmetrisch sein und die Hauptdiagonale 0
         for (int i = 0; i < distanceMatrix.length; i += 1) {
             for (int j = i; j < distanceMatrix.length; j += 1) {
                 if (dMatrix[(distanceMatrix.length * i + j)] < 0
@@ -38,11 +42,12 @@ public final class GraphFactory {
     }
     
     /**
-     * Erstellt einen DiGraphen aus einer Distanzmatrix
-     *
-     * @preConditions alle Werte der Matrix x | x > -1 <br> distanceMatrix muss
-     * quadratisch sein <br> alle  Werte der Hauptdiagonalen mÃ¼ssen den Wert 0 besitzen <br> ansonsten
-     * wird ein normalisierter Graph der GrÃ¶ÃŸe 3 erstellt
+     * Erstellt einen DiGraphen aus einer Distanzmatrix.
+     * @preCondition alle Werte der Matrix x | x > 0
+     * @preCondition distanceMatrix muss quadratisch sein
+     * @preCondition alle Werte der Hauptdiagonalen müssen den Wert 0 besitzen
+     * @param distanceMatrix	Distanzmatrix
+     * @return erzeugter Graph (normalisierter Graph der Größe 3, falls die preConditions nicht erfüllt wurden)
      */
     public static IGraph createDiGraph(int[][] distanceMatrix) {
         // int[] Matrix erzeugen
@@ -53,10 +58,11 @@ public final class GraphFactory {
             }
         }
 
-        // Alle werte mÃ¼ssen grÃ¶ÃŸer gleich -1 sein, Hauptdiagonale muss 0 sein
+        // Alle Werte müssen positiv sein (außer bei einer nicht existenten Kante), Hauptdiagonale muss 0 sein
         for (int i = 0; i < distanceMatrix.length; i += 1) {
             for (int j = i; j < distanceMatrix.length; j += 1) {
-                if (dMatrix[(distanceMatrix.length * i + j)] < -1 || ((i==j) && dMatrix[(distanceMatrix.length * i + j)]!=0 )){
+                if ((dMatrix[(distanceMatrix.length * i + j)] < 0 && dMatrix[(distanceMatrix.length * i + j)] != IGraph.NON_EXISTING_EDGE)
+                		|| ((i == j) && dMatrix[(distanceMatrix.length * i + j)] != 0)){
                     return createNormalizedGraph(3);
                 }
              }
@@ -65,15 +71,15 @@ public final class GraphFactory {
     }
 
     /**
-     * Erstellt einen symmetrischen Graphen mit zufÃ¯Â¿Â½llig generierten
-     * Kantengewichtung im Bereich von 1-100
-     *
-     * @preConditions es muss gelten: numberOfVertices >= 3 <br> ansonsten wird
-     * 3 als Standardwert angenommen
+     * Erstellt einen symmetrischen Graphen mit zufällig generierten Kantengewichtung im Bereich von 1-100.
+     * @preCondition numberOfVertices >= 3
+     * @param numberOfVertices	Anzahl der Ecken
+     * @param randSeed			Eingabe für den Zufallsgenerator
+     * @return erzeugter Graph (Graph mit 3 Ecken, falls die preCondition nicht erfüllt wurde)
      */
     public static IGraph createRandomGraph(int numberOfVertices, long randSeed) {
         Random rand = new Random(randSeed);
-        // PrÃ¯Â¿Â½fung auf gÃ¯Â¿Â½ltige Werten, ansonsten Standardwert
+        // Prüfung auf gültige Werten, ansonsten Standardwert
         if (numberOfVertices < 3) {
             numberOfVertices = 3;
         }
@@ -95,15 +101,14 @@ public final class GraphFactory {
     }
 
     /**
-     * Erstellt symmetrischen Graphen mit einer konstanten Kantengewichtung <br>
-     * Die Gewichtung wird durch die Differenz zweier Knoten bestimmt <br> z.B.
-     * distance(1,2) = 1; distance(1,4) = 3; etc.
-     *
-     * @preConditions es muss gelten: numberOfVertices >= 3 <br> ansonsten wird
-     * 3 als Standardwert angenommen
+     * Erstellt einen symmetrischen Graphen mit einer konstanten Kantengewichtung. 
+     * Die Gewichtung wird durch die Differenz zweier Knoten bestimmt z.B. distance(1,2) = 1; distance(1,4) = 3; etc.
+     * @preCondition numberOfVertices >= 3
+     * @param numberOfVertices	Anzahl der Ecken
+     * @return erzeugter Graph (Graph mit 3 Ecken, falls die preCondition nicht erfüllt wurde)
      */
     public static IGraph createNormalizedGraph(int numberOfVertices) {
-        // PrÃ¼fung auf gÃ¼ltige Werten, ansonsten Standardwert
+        // Prüfung auf gültige Werten, ansonsten Standardwert
         if (numberOfVertices < 3) {
             numberOfVertices = 3;
         }

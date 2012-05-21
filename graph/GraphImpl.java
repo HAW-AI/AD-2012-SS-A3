@@ -4,17 +4,25 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Implementierung des Grapheninterfaces.
+ */
 public class GraphImpl implements IGraph {
 
 	private final int[] distanceMatrix;
 
+	/**
+	 * Konstruktor eines Graphen mit �bergabe der Distanzmatrix.
+	 * @precondition Die Anzahl der Elemente der Matrix muss quadratisch sein.
+	 * @param distanceMatrix
+	 */
 	GraphImpl(int[] distanceMatrix) {
 		this.distanceMatrix = distanceMatrix;
 	}
 
 	@Override
 	public int edgeWeight(int vert1, int vert2) {
-		// Prï¿½fung auf gï¿½ltigen Wertebereich
+		// Pr�fung auf g�ltigen Wertebereich
 		int size = getNumberOfVertices();
 		if ((vert1 < 0) || (vert2 < 0) || (vert1 >= size) || (vert2 >= size))
 			return 0;
@@ -70,7 +78,7 @@ public class GraphImpl implements IGraph {
 		int size = getNumberOfVertices();
 		for (int i = 0; i < size; i++){
 			int check = distanceMatrix[(size * vertice + i)];
-			if(check > 0 && vertice != i)
+			if(check != NON_EXISTING_EDGE && vertice != i)
 					reachable.add(i);
 			}
 		return reachable;

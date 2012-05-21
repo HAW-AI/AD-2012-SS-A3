@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * IOManager zum Laden von Graphen aus Dateien und zur Ausgabe von Logs.
+ */
 public class IOManager {
 	private final File logFile;
 	private final String filePath;
@@ -26,9 +29,9 @@ public class IOManager {
 	/**
 	 * Liest einen Matrix ein
 	 * 
-	 * @return Es wird ein quadratisches, symmetrisches int[][] zurï¿½ckgegeben <br>
+	 * @return Es wird ein quadratisches, symmetrisches int[][] zurückgegeben <br>
 	 *         falls ein Fehler auftritt, wird ein normalisierter Graph der
-	 *         Grï¿½ï¿½e 3 zurï¿½ckgegeben
+	 *         Größe 3 zurückgegeben
 	 */
 	public int[][] readMatrix() {
 
@@ -123,51 +126,54 @@ public class IOManager {
 	}
         
 	/**
-	 * Erzeugt eine vollstÃ¤ndige oder unvollstÃ¤ndige unsymetrische zufÃ¤llige Distanzmatrix.
-	 * @preConditions maxdistance >=1
+	 * Erzeugt eine vollständige oder unvollsändige unsymetrische zufällige Distanzmatrix.
+	 * @preCondition maxdistance >=1
 	 * @param seed
-	 *            Der Seed der fÃ¼r den Aufruf von Random benutzt werden soll
-         * @param maxdistance
-         *           Maximale Entfernung zwischen den Kanten
-         * @param size
-         *           Anzahl der gewÃ¼nschten Zeilen und Spalten
-         * @param chanceofcorrupted
-         *          Wahrscheinlichkeit mit der Kanten im Graphen mit -1 belegt werden sollen
-         *          Bei 0, entsteht ein vollstÃ¤ndiger unsymetrischer Graph
-         *          Bei >0, entsteht ein unvollstÃ¤ndiger unsymetrischer Graph
+	 *          Der Seed der für den Aufruf von Random benutzt werden soll
+     * @param maxdistance
+     *          Maximale Entfernung zwischen den Kanten
+     * @param size
+     *          Anzahl der gewünschten Zeilen und Spalten
+     * @param chanceofcorrupted
+     *          Wahrscheinlichkeit mit der Kanten im Graphen mit -1 belegt werden sollen
+     *          Bei 0, entsteht ein vollstÃ¤ndiger unsymetrischer Graph
+     *          Bei >0, entsteht ein unvollstÃ¤ndiger unsymetrischer Graph
 	 */        
+	public static int[][] RandomDistanceMatrix(int seed, int maxdistance,
+			int size, double chanceofcorrupted) {
+		Random rand = new Random(seed);
+		int[][] result = new int[size][size];
+		// Wertepoole erzeugen
+		int[] pool = new int[maxdistance
+				+ (int) ((1 - chanceofcorrupted) * maxdistance)];
+
+		for (int i = 0; i < (maxdistance); i++) {
+			pool[i] = -1;
+		}
+
+		for (int i = maxdistance; i < (int) (maxdistance + (1 - chanceofcorrupted)
+				* maxdistance); i++) {
+			pool[i] = i + 1 - maxdistance;
+		}
+		for (int i = 0; size > i; i++) {
+			for (int j = 0; size > j; j++) {
+				if (i == j) {
+					result[i][j] = 0;
+				} else {
+					int ran = (int) (rand.nextDouble() * pool.length);
+					result[i][j] = pool[ran];
+				}
+			}
+		}
+		return result;
+	}
         
-        public static int[][] RandomDistanceMatrix(int seed,  int maxdistance,int size,double chanceofcorrupted ) {
-             Random rand = new Random(seed);
-             int[][] result = new int[size][size];
-             // Wertepoole erzeugen
-             int[] pool = new int [maxdistance+(int) ((1-chanceofcorrupted)*maxdistance)];
-             
-            for (int i = 0;i<(maxdistance);i++) {
-                pool[i]=-1;
-           }
-            
-           for (int i = maxdistance;i<(int) (maxdistance+(1-chanceofcorrupted)*maxdistance);i++) {
-                 pool[i]=i+1-maxdistance;
-            }           
-             for (int i = 0;size > i;i++) {
-                 for (int j = 0; size > j;j++) {
-                     if (i==j){    result[i][j]=0;}
-                     else
-                     {
-                         int ran = (int) (rand.nextDouble()*pool.length);
-                         result[i][j]=pool[ran];
-                     }
-                 }
-             }
-           return result;
-        }
-        /**
+	/**
      * Liest eine Matrix als Digraph ein
      *
-     * @return Es wird ein quadratisches int[][] zurÃ¼ckgegeben
-     * <br> falls ein Fehler auftritt, wird ein normalisierter Graph der GrÃ¶ÃŸe 3
-     * zurÃ¼ckgegeben
+     * @return Es wird ein quadratisches int[][] zurückgegeben
+     * <br> falls ein Fehler auftritt, wird ein normalisierter Graph der Größe 3
+     * zurückgegeben
      */
     public int[][] readDigraphMatrix() {
 
@@ -183,7 +189,7 @@ public class IOManager {
 
                 // -- Folgender Codeblock sucht das Ende der EDGE_WEIGHT_SECTION
                 // -- Markierung ist EOF
-                // -- und speicert alle Zeilen mit Informationen zu KantenlÃ¤ngen
+                // -- und speicert alle Zeilen mit Informationen zu Kantenlängen
                 // -- in einer Liste
                 List<String> l = new ArrayList<String>();
                 StringBuilder sb = new StringBuilder();
