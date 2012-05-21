@@ -214,7 +214,7 @@ public class IOManager {
 		try {
 			BufferedReader input = new BufferedReader(new InputStreamReader(
 					new FileInputStream(
-							"C:/Users/Car/Downloads/ALL_atsp/p43.atsp")));
+							filePath)));
 			try {
 				// Lese Datei komplett ein.
 				StringBuilder sb = new StringBuilder();
