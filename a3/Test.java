@@ -33,7 +33,7 @@ public class Test {
         System.out.println(algo.getPathLength(path, graph) + " " + path + " | Lsg: 0 2 1 0  L: 35");
        
         System.out.println("### Teste grossen unvollstaendigen Graphen ohne bekannte Loesung ###");
-        graph = GraphFactory.createDiGraph(IOManager.RandomDistanceMatrix(1338, 200, 200, 1));
+        graph = GraphFactory.createDiGraph(IOManager.RandomDistanceMatrix(1338, 200, 200, 0.1));
         path = algo.shortestPath(graph, 0);
         System.out.println(algo.getPathLength(path, graph) + " " + path + " | Lsg: Unbekannt");
         
@@ -59,16 +59,16 @@ public class Test {
             path = algo.shortestPath(graph, 0);
             int w = algo.getPathLength(path, graph);
             int diff = w-bestSolution;
-            System.out.println("Weglänge: "+ w + "("+ (diff)+")");
+            System.out.println("Weglï¿½nge: "+ w + "("+ (diff)+")");
             maxdiff = Math.max(maxdiff, diff);
             totaldiff += diff;
             if (diff > 0)
                 ++fails;
         }
         System.out.println("-------------------------------------");
-        System.out.println("Erfolgsquote:     " + String.format("%.2f",(RUNS-fails)*100.0/RUNS) + "%   (" + fails + " Fehler in " + RUNS + " Durchläufen)");
+        System.out.println("Erfolgsquote:     " + String.format("%.2f",(RUNS-fails)*100.0/RUNS) + "%   (" + fails + " Fehler in " + RUNS + " Durchlï¿½ufen)");
         System.out.println("Gesamtdifferenz:  " + totaldiff);
-        System.out.println("Größte Differenz: " + maxdiff);
+        System.out.println("Grï¿½ï¿½te Differenz: " + maxdiff);
         System.out.println("Durchschntl.Diff: " + String.format("%.2f", (((double)totaldiff)/RUNS)));
         System.out.println("-------------------------------------");
     }
