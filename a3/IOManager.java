@@ -32,9 +32,9 @@ public class IOManager {
 	/**
 	 * Liest einen Matrix ein
 	 * 
-	 * @return Es wird ein quadratisches, symmetrisches int[][] zur�ckgegeben <br>
+	 * @return Es wird ein quadratisches, symmetrisches int[][] zurueckgegeben <br>
 	 *         falls ein Fehler auftritt, wird ein normalisierter Graph der
-	 *         Gr��e 3 zur�ckgegeben
+	 *         Groesse 3 zurueckgegeben
 	 */
 	public int[][] readMatrix() {
 
@@ -155,16 +155,16 @@ public class IOManager {
 	}
 
 	/**
-	 * Erzeugt eine vollst�ndige oder unvolls�ndige unsymetrische zuf�llige
+	 * Erzeugt eine vollstaendige oder unvollsaendige unsymetrische zufaellige
 	 * Distanzmatrix.
 	 * 
 	 * @preCondition maxdistance >=1
 	 * @param seed
-	 *            Der Seed der f�r den Aufruf von Random benutzt werden soll
+	 *            Der Seed der fuer den Aufruf von Random benutzt werden soll
 	 * @param maxdistance
 	 *            Maximale Entfernung zwischen den Kanten
 	 * @param size
-	 *            Anzahl der gew�nschten Zeilen und Spalten
+	 *            Anzahl der gewuenschten Zeilen und Spalten
 	 * @param chanceofcorrupted
 	 *            Wahrscheinlichkeit mit der Kanten im Graphen mit -1 belegt
 	 *            werden sollen Bei 0, entsteht ein vollständiger unsymetrischer
@@ -201,62 +201,58 @@ public class IOManager {
 	}
 
 	/**
-	 * Liest eine Matrix als Digraph ein
+	 * Liest eine Matrix im Standardformat ein
 	 * 
-	 * @return Es wird ein quadratisches int[][] zur�ckgegeben <br>
+	 * @return Es wird ein quadratisches, symmetrisches int[][] zurückgegeben <br>
 	 *         falls ein Fehler auftritt, wird ein normalisierter Graph der
-	 *         Gr��e 3 zur�ckgegeben
+	 *         Größe 3 zurückgegeben
 	 */
 	public int[][] readDigraphMatrix() {
 
-		String dimension = "DIMENSION:";
 		int[][] failMatrix = { { 0, 1, 2 }, { 1, 0, 1 }, { 2, 1, 0 } };
+		int dimension = readDimension();
+
 		try {
 			BufferedReader input = new BufferedReader(new InputStreamReader(
-					new FileInputStream(
-							filePath)));
+					new FileInputStream(filePath)));
 			try {
-				// Lese Datei komplett ein.
-				StringBuilder sb = new StringBuilder();
-				StringBuilder sb2 = new StringBuilder();  // Kopie erzeugen, da Pattern den String zerstört
-				
 				String s;
-
+				// -- Folgender Codeblock sucht den Anfang der
+				// EDGE_WEIGHT_SECTION
 				do {
 					s = input.readLine();
-					sb.append(s);
-					sb2.append(s);
-				} while (s != null && !s.contains("EOF"));
-				Pattern pattern = Pattern.compile(dimension + "\\s*[\\d]*");
-				Matcher matcher = pattern.matcher(sb);
-				int size = 0;
-				while (matcher.find())
-					size = Integer.parseInt(matcher.group().split(" ")[1]
-							.trim());
+				} while (s != null && !s.contains("EDGE_WEIGHT_SECTION"));
 
-				int[][] matrix = new int[size][size];
-				int index = sb2.indexOf(dimension);
-				String f = sb2.substring(index + dimension.length()
-						+ Integer.toString(size).length() + 1);
-
-				Pattern pattern2 = Pattern.compile("\\s*[\\d]*\\s*\\t*");
-				Matcher matcher2 = pattern2.matcher(f);
-				int i = 0;
-				while (matcher2.find()) {
-					String tempzahl = matcher2.group().trim();
-					if (!tempzahl.isEmpty()) {
-						// Falls nicht Hauptdiagonale, bei 0 mit -1 ersetzen
-						int buff = Integer.parseInt(tempzahl);
-						if ((i / size) ==( i % size) && buff==0) {
-							buff = -1;
-						}
-						
-						matrix[i / size][i % size] = buff;
-						i++;
-					}
-
+				// -- Folgender Codeblock sucht das Ende der EDGE_WEIGHT_SECTION
+				// -- Markierung ist EOF
+				// -- und hängt alle Zeilen mit Informationen zu Kantenlängen
+				// -- an einen StringBuilder
+				StringBuilder sb = new StringBuilder();
+				s = input.readLine();
+				while (s != null && !s.trim().equals("EOF")) {
+					sb.append(" ").append(s);
+					s = input.readLine();
+				}
+				int index = sb.indexOf("  ");
+				while (index >= 0) {
+					sb.deleteCharAt(index);
+					index = sb.indexOf("  ");
 				}
 
+				// -- Kantenlängen sind jetzt im Stringbuilder
+				String[] xAry = sb.toString().trim().split(" ");
+
+				// -- Ab hier unveränderter Code
+				int[][] matrix = new int[dimension][dimension];
+
+				for (int y = 0; y < matrix.length; y++) {
+					for (int x = 0; x < matrix[0].length; x++) {
+						if (y != x) {
+							matrix[y][x] = Integer.parseInt(xAry[y
+									* matrix.length + x]);
+						}
+					}
+				}
 				input.close();
 				return matrix;
 			} catch (IOException e) {
@@ -267,6 +263,32 @@ public class IOManager {
 			System.out.println("File not found!");
 			return failMatrix;
 		}
+	}
 
+	public int readDimension() {
+		int dimension = 0;
+
+		try {
+			BufferedReader input = new BufferedReader(new InputStreamReader(
+					new FileInputStream(filePath)));
+			try {
+				String s;
+				do {
+					s = input.readLine();
+				} while (s != null && !s.contains("DIMENSION:"));
+				try {
+					dimension = Integer.parseInt(s.substring(
+							("DIMENSION:").length()).trim());
+				} catch (NumberFormatException e) {
+					System.out.println("NumberFormatException!");
+				}
+				input.close();
+			} catch (IOException e) {
+				System.out.println("IOExecption!");
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println("File not found!");
+		}
+		return dimension;
 	}
 }
