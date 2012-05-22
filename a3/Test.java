@@ -38,7 +38,7 @@ public class Test {
         System.out.println(graph.getPathLength(path) + " " + path + " | Lsg: Unbekannt");
         
         System.out.println("### Teste kleinen unvollstaendigen Graphen mit Loesung ###");
-        IOManager io = new IOManager("digraph/digraph.txt"); //LSG 0 1 2 0 L:9
+        IOManager io = new IOManager("./digraph/digraph.txt"); //LSG 0 1 2 0 L:9
         graph = GraphFactory.createDiGraph(io.readDigraphMatrix());
         path = algo.shortestPath(graph, 0);
         System.out.println(graph.getPathLength(path) + " " + path + " | Lsg: 0 1 2 0  L: 9");
@@ -48,7 +48,7 @@ public class Test {
         System.out.println(graph.getPathLength(path) + " " + path + " | Lsg: 0 1 2 0  L: 9");
         
         System.out.println("### Teste symmetrische ###");
-        io = new IOManager("simGraph("+ GRAPH +").txt");
+        io = new IOManager("./simGraph("+ GRAPH +").txt");
         graph = GraphFactory.createGraph(io.readMatrix());
         int bestSolution = io.readBestSolution();
         int totaldiff = 0;
