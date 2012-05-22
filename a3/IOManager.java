@@ -296,27 +296,34 @@ public class IOManager {
 					sb.append(s);
 					s = input.readLine();
 				}
-				int index = sb.indexOf("  ");
-				while (index >= 0) {
-					sb.deleteCharAt(index);
-					index = sb.indexOf("  ");
+
+				String[] xAry = sb.toString().split(" ");
+				String[] clean = new String[xAry.length - 1]; // Erstes
+																// Leerzeichen
+																// entfernen
+
+				for (int i = 1; i < xAry.length - 1; i++) {
+					clean[i - 1] = xAry[i];
 				}
 
-				// -- Kantenlängen sind jetzt im Stringbuilder
-				String[] xAry = sb.toString().trim().split(" ");
-
-				// -- Ab hier unveränderter Code
 				int[][] matrix = new int[dimension][dimension];
 
-				for (int y = 0; y < matrix.length; y++) {
-					for (int x = 0; x < matrix[0].length; x++) {
-						if (y != x) {
-							matrix[y][x] = Integer.parseInt(xAry[y
-									* matrix.length + x]);
-						} else {
-							// matrix[y][x] = -1;
-						}
+				int zeile = 1;
+				int spalte = 0;
+				int i = 1;
+				while (i < clean.length - 1) {
+					int temo = Integer.parseInt(clean[i]);
+					if (temo == 0) {
+						matrix[zeile][spalte] = 0;
+						spalte = 0;
+						zeile++;
+					} else {
+						matrix[zeile][spalte] = temo;
+						matrix[spalte][zeile] = temo;
+						spalte++;
+
 					}
+					i++;
 				}
 				input.close();
 				return matrix;

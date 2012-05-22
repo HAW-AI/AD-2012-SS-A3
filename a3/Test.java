@@ -19,6 +19,7 @@ public class Test {
     	int[][] distancematrix1 = {{0,-1,2},{5,0,7},{5,5,0}}; //Lsg: 0 2 1 0  L: 12
     	int[][] distancematrix2 = {{0,-1,-1},{5,0,7},{5,5,0}}; //Kein Pfad
    		int[][] distancematrix3 = {{0,-1,15},{5,0,1},{1,15,0}}; //Lsg: 0 2 1 0  L: 35
+   		IOManager io;
     			
         IGraph graph = GraphFactory.createDiGraph(distancematrix1);
         List<Integer> path = algo.shortestPath(graph, 0);
@@ -38,7 +39,7 @@ public class Test {
         System.out.println(graph.getPathLength(path) + " " + path + " | Lsg: Unbekannt");
         
         System.out.println("### Teste kleinen unvollstaendigen Graphen mit Loesung ###");
-        IOManager io = new IOManager("./digraph/digraph.txt"); //LSG 0 1 2 0 L:9
+        io = new IOManager("./digraph/digraph.txt"); //LSG 0 1 2 0 L:9
         graph = GraphFactory.createDiGraph(io.readDigraphMatrixFromUniFile());
         path = algo.shortestPath(graph, 0);
         System.out.println(graph.getPathLength(path) + " " + path + " | Lsg: 0 1 2 0  L: 9");
@@ -53,12 +54,12 @@ public class Test {
         path = algo.shortestPath(graph, 0);
         System.out.println(graph.getPathLength(path) + " " + path + " | L: 2755");   
         
-       System.out.println("### Teste kleinen ungerichteten vollstaendigen Graphen aus Uni File ###");
+        System.out.println("### Teste kleinen ungerichteten vollstaendigen Graphen aus Uni File ###");
         io = new IOManager("./tsp/gr24.tsp"); 
-        graph = GraphFactory.createDiGraph(io.readGraphMatrixFromUniFile());
+        graph = GraphFactory.createGraph(io.readGraphMatrixFromUniFile());
         
         path = algo.shortestPath(graph, 0);
-        System.out.println(graph.getPathLength(path) + " " + path + " | Lsg: 0 1 2 0  L: 9");          
+        System.out.println(graph.getPathLength(path) + " " + path + " | ");          
         
         System.out.println("### Teste symmetrische ###");
         io = new IOManager("./simGraph("+ GRAPH +").txt");
