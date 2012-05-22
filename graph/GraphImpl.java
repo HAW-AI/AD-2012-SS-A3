@@ -2,6 +2,7 @@ package graph;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -12,7 +13,7 @@ public class GraphImpl implements IGraph {
 	private final int[] distanceMatrix;
 
 	/**
-	 * Konstruktor eines Graphen mit Übergabe der Distanzmatrix.
+	 * Konstruktor eines Graphen mit Uebergabe der Distanzmatrix.
 	 * @precondition Die Anzahl der Elemente der Matrix muss quadratisch sein.
 	 * @param distanceMatrix
 	 */
@@ -22,7 +23,7 @@ public class GraphImpl implements IGraph {
 
 	@Override
 	public int edgeWeight(int vert1, int vert2) {
-		// Prüfung auf gültigen Wertebereich
+		// Pruefung auf gueltigen Wertebereich
 		int size = getNumberOfVertices();
 		if ((vert1 < 0) || (vert2 < 0) || (vert1 >= size) || (vert2 >= size))
 			return 0;
@@ -82,6 +83,18 @@ public class GraphImpl implements IGraph {
 					reachable.add(i);
 			}
 		return reachable;
+	}
+
+	@Override
+	public int getPathLength(List<Integer> path) {
+		int wayLength = 0;
+		if(path.size() > 0 && path.get(0) >= getNumberOfVertices()) return 0;
+		for (int i = 0; i < path.size() - 1; ++i) {
+			int check = path.get(i + 1);
+			if(check >= getNumberOfVertices()) return 0;
+			wayLength += edgeWeight(path.get(i), check);
+		}
+		return wayLength;
 	}
 
 }

@@ -8,7 +8,7 @@ import java.util.List;
 public class Test {
     private final static int RUNS = 10;
     private final static int STEPS = 500;
-    private final static int ANTS = 1500;
+    private final static int ANTS = 2000;
     private final static int GRAPH = 24;
     
     public static void main(String ... args) {
@@ -22,33 +22,33 @@ public class Test {
     			
         IGraph graph = GraphFactory.createDiGraph(distancematrix1);
         List<Integer> path = algo.shortestPath(graph, 0);
-        System.out.println(algo.getPathLength(path, graph) + " " + path + " | Lsg: 0 2 1 0  L: 12");
+        System.out.println(graph.getPathLength(path) + " " + path + " | Lsg: 0 2 1 0  L: 12");
         
         graph = GraphFactory.createDiGraph(distancematrix2);
         path = algo.shortestPath(graph, 0);
-        System.out.println(algo.getPathLength(path, graph) + " " + path + " | Lsg: Kein Pfad");
+        System.out.println(graph.getPathLength(path) + " " + path + " | Lsg: Kein Pfad");
         
         graph = GraphFactory.createDiGraph(distancematrix3);
         path = algo.shortestPath(graph, 0);
-        System.out.println(algo.getPathLength(path, graph) + " " + path + " | Lsg: 0 2 1 0  L: 35");
+        System.out.println(graph.getPathLength(path) + " " + path + " | Lsg: 0 2 1 0  L: 35");
        
         System.out.println("### Teste grossen unvollstaendigen Graphen ohne bekannte Loesung ###");
         graph = GraphFactory.createDiGraph(IOManager.RandomDistanceMatrix(1338, 200, 200, 0.1));
         path = algo.shortestPath(graph, 0);
-        System.out.println(algo.getPathLength(path, graph) + " " + path + " | Lsg: Unbekannt");
+        System.out.println(graph.getPathLength(path) + " " + path + " | Lsg: Unbekannt");
         
         System.out.println("### Teste kleinen unvollstaendigen Graphen mit Loesung ###");
-        IOManager io = new IOManager("src/digraph/digraph.txt"); //LSG 0 1 2 0 L:9
+        IOManager io = new IOManager("digraph/digraph.txt"); //LSG 0 1 2 0 L:9
         graph = GraphFactory.createDiGraph(io.readDigraphMatrix());
         path = algo.shortestPath(graph, 0);
-        System.out.println(algo.getPathLength(path, graph) + " " + path + " | Lsg: 0 1 2 0  L: 9");
+        System.out.println(graph.getPathLength(path) + " " + path + " | Lsg: 0 1 2 0  L: 9");
         
         System.out.println("### Teste kleinen unvollstaendigen Graphen anhand BruteForce ###");
         path = BruteForce.shortestPath(graph, 0);
-        System.out.println(BruteForce.getPathLength(path, graph) + " " + path + " | Lsg: 0 1 2 0  L: 9");
+        System.out.println(graph.getPathLength(path) + " " + path + " | Lsg: 0 1 2 0  L: 9");
         
         System.out.println("### Teste symmetrische ###");
-        io = new IOManager("src/simGraph("+ GRAPH +").txt");
+        io = new IOManager("simGraph("+ GRAPH +").txt");
         graph = GraphFactory.createGraph(io.readMatrix());
         int bestSolution = io.readBestSolution();
         int totaldiff = 0;
@@ -57,7 +57,7 @@ public class Test {
         for(int i = 0; i < RUNS; ++i) {
             System.out.print(i+") ");
             path = algo.shortestPath(graph, 0);
-            int w = algo.getPathLength(path, graph);
+            int w = graph.getPathLength(path);
             int diff = w-bestSolution;
             System.out.println("Wegl�nge: "+ w + "("+ (diff)+")");
             maxdiff = Math.max(maxdiff, diff);

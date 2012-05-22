@@ -78,7 +78,7 @@ public class DrawPanel extends JPanel implements Runnable  {
 
     synchronized void setPath(List<Integer> path) {
     	this.path = path;
-    	System.out.println("Errechneter Pfad: "+path+" Len: "+algo.getPathLength(path, graph));
+    	System.out.println("Errechneter Pfad: "+path+" Len: "+graph.getPathLength(path));
     }
     
 	@Override

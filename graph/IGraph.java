@@ -1,18 +1,19 @@
 package graph;
 
+import java.util.List;
 import java.util.Set;
 
 /**
- * Interface für Graphen.
+ * Interface fuer Graphen.
  */
 public interface IGraph {
 	/**
-	 * Wert für eine nicht existente Kante zwischen zwei Ecken im Graphen.
+	 * Wert fuer eine nicht existente Kante zwischen zwei Ecken im Graphen.
 	 */
 	public static final int NON_EXISTING_EDGE = -1;
 	
 	/**
-	 * Gibt die Distanz zwischen zwei Ecken im Graphen zurück gibt eine 0 zurück, falls eine ungültige Anfrage gestellt wurde.
+	 * Gibt die Distanz zwischen zwei Ecken im Graphen zurueck gibt eine 0 zurueck, falls eine ungueltige Anfrage gestellt wurde.
 	 * @preCondition vert1, vert2 > 0
 	 * @preCondition vert1, vert2 < Anzahl Knoten
 	 * @param vert1		Index der Start-Ecke
@@ -22,19 +23,27 @@ public interface IGraph {
 	int edgeWeight(int vert1, int vert2);
 
 	/**
-	 * Gibt die Anzahl an Ecken im Graphen zurück.
+	 * Gibt die Anzahl an Ecken im Graphen zurueck.
 	 * @return Anzahl der Ecken im Graphen
 	 */
 	int getNumberOfVertices();
+	
+	
+	/**
+	 * Berechnet die Summe der Distanzen des gegebenen Weges.
+	 * @param path		Liste aus Indizes von Ecken, die den Weg bilden
+	 * @return Summe der Kantendistanzen des Weges
+	 */
+	public int getPathLength(List<Integer> path);
 
 //	Set<Integer> getneighbours(int Vertex);
 	/**
-	 * Gibt die Menge aus Indezes von Ecken zurück, die von der gegebenen Ecke erreichbar sind.
+	 * Gibt die Menge aus Indezes von Ecken zurueck, die von der gegebenen Ecke erreichbar sind.
 	 * @return Menge aus Indezes der erreichbaren Ecken
 	 */
 	Set<Integer> reachableAdjacencyVerticesOf(int vertice);
 	
-	// Für weiter Optimierung des Alg, ev nützlich
+	// Fuer weiter Optimierung des Alg, ev nuetzlich
 //	int inDegreeOf(int vertice);
 //	int outDegreeOf(int vertice);
 }

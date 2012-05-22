@@ -11,10 +11,10 @@ import java.util.List;
 public class BruteForce {
 
 	/**
-	 * Liefert den kürzesten Weg von der Start/Ziel-Ecke über den Graphen zurück.
+	 * Liefert den kuerzesten Weg von der Start/Ziel-Ecke ueber den Graphen zurueck.
 	 * @param g			Graph
 	 * @param start		Start/Ziel-Ecke
-	 * @return Liste der Indizes der Ecken des kürzesten Weges
+	 * @return Liste der Indizes der Ecken des kuerzesten Weges
 	 */
 	public static List<Integer> shortestPath(IGraph g, int start) {
 		List<Integer> vertices = new ArrayList<Integer>();
@@ -31,7 +31,7 @@ public class BruteForce {
 	}
 
 	/**
-	 * Rekursiver Algorithmus, der alle möglichen Wege austestet.
+	 * Rekursiver Algorithmus, der alle moeglichen Wege austestet.
 	 * @param g			Graph
 	 * @param vertices	(noch vorhandene) Liste von Ecken
 	 * @param way		bisheriger Weg
@@ -50,7 +50,7 @@ public class BruteForce {
 		int minPathLength = Integer.MAX_VALUE;
 		List<Integer> minPath = new ArrayList<Integer>();
 		for (int i : vertices) {
-			// Überspringen, falls es gar keinen Weg gibt
+			// Ueberspringen, falls es gar keinen Weg gibt
 			if (g.edgeWeight(way.get(way.size()-1), i) == IGraph.NON_EXISTING_EDGE) continue;
 			
 			verts.clear();
@@ -60,7 +60,7 @@ public class BruteForce {
 			pathToTry.addAll(way);
 			pathToTry.add(i);
 			List<Integer> Path = rekAlgo(g, verts, pathToTry);
-			int pathLength = getPathLength(Path, g);
+			int pathLength = g.getPathLength(Path);
 			if (pathLength <= minPathLength) {
 				minPathLength = pathLength;
 				minPath.clear();
@@ -69,20 +69,4 @@ public class BruteForce {
 		}
 		return minPath;
 	}
-
-	/**
-	 * Berechnet die Summe der Distanzen des gegebenen Weges anhand des gegegeben Graphen.
-	 * @param path		Liste aus Indizes von Ecken, die den Weg bilden
-	 * @param g			Graph
-	 * @return Summe der Kantendistanzen des Weges
-	 */
-	public static int getPathLength(List<Integer> path, IGraph g) {
-		int wayLength = 0;
-		for (int i = 0; i < path.size() - 1; ++i) {
-			wayLength += g.edgeWeight(path.get(i), path.get(i + 1));
-		}
-		return wayLength;
-
-	}
-
 }
