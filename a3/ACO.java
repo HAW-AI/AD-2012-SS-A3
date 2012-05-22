@@ -12,6 +12,7 @@ import java.util.*;
  * Ant Colony Optimization Algorithmus fuer das Traveling Salesman Problem.
  */
 public class ACO {
+	private static final boolean DEBUG = true;
 	private final int maxAnts;
 	private final int steps;
 	private final int SPAWN_RATE = 100;
@@ -32,7 +33,7 @@ public class ACO {
 		this.outputInterval = 100;
 	}
 	
-	public ACO(int antCount, int steps, int debugType, int outputInterval) {
+	ACO(int antCount, int steps, int debugType, int outputInterval) {
 		maxAnts = antCount;
 		this.steps = steps;
 		this.debugType = debugType;	
@@ -85,10 +86,12 @@ public class ACO {
 							shortestPathLength = pathLength;
 							shortestPath = ant.getPath();
 							tryCount = 0;
-                            //Debug Informations
-                            if (debugType == 3 || debugType == 1) {
-                                System.out.println(getPrintString(stepCount, shortestPathLength, shortestPath));
-                            }
+							if (DEBUG) {
+								//Debug Informations
+								if (debugType == 3 || debugType == 1) {
+									System.out.println(getPrintString(stepCount, shortestPathLength, shortestPath));
+								}
+							}
 						}
 						ant.reset();
 					} else {
@@ -102,10 +105,12 @@ public class ACO {
 						ant.reset();
 					} else {
 						ant.moveTo(target);
-                        //Debug Informations
-	                    if (debugType == 3) {
-	                        System.out.println(getPrintString(ant));
-	                    }
+						if (DEBUG) {
+							//Debug Informations
+							if (debugType == 3) {
+								System.out.println(getPrintString(ant));
+							}
+						}
 					}
 				}
 			}
@@ -113,10 +118,12 @@ public class ACO {
 			resetPheroMatrix(tempPheroMatrix, 0);
 			++stepCount;
 			++tryCount;
-            //Debug Informations
-            if (debugType == 2 && stepCount % outputInterval == 0) {
-                System.out.println(getPrintString(stepCount, shortestPathLength, shortestPath));
-            }
+			if (DEBUG) {
+				//Debug Informations
+				if (debugType == 2 && stepCount % outputInterval == 0) {
+					System.out.println(getPrintString(stepCount, shortestPathLength, shortestPath));
+				}
+			}
 		}
 		return shortestPath;
 	}
@@ -243,7 +250,7 @@ public class ACO {
 	
     private String getPrintString(int stepCount, int shortestPathLength, List<Integer> shortestPath) {
 
-        return "Step " + stepCount + "=> shortest Path: " + shortestPath + ", Length: " + shortestPathLength;
+        return "Step " + stepCount + ", Length: " + shortestPathLength + " => shortest Path: " + shortestPath ;
     }
 
     private String getPrintString(IAnt ant) {
