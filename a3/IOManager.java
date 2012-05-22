@@ -207,7 +207,7 @@ public class IOManager {
 	 *         falls ein Fehler auftritt, wird ein normalisierter Graph der
 	 *         Größe 3 zurückgegeben
 	 */
-	public int[][] readDigraphMatrix() {
+	public int[][] readDigraphMatrixFromUniFile() {
 
 		int[][] failMatrix = { { 0, 1, 2 }, { 1, 0, 1 }, { 2, 1, 0 } };
 		int dimension = readDimension();
