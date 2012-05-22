@@ -12,11 +12,12 @@ import java.util.*;
  * Ant Colony Optimization Algorithmus fuer das Traveling Salesman Problem.
  */
 public class ACO {
-	private static final boolean DEBUG = false;
 	private final int maxAnts;
 	private final int steps;
 	private final int SPAWN_RATE = 100;
 	private final double VAPORIZE_RATE = 0.5;
+	private final int debugType;
+	private final int outputInterval;
 	private Random rand = new Random(1337);
 
 	/**
@@ -27,6 +28,15 @@ public class ACO {
 	public ACO(int antCount, int steps) {
 		maxAnts = antCount;
 		this.steps = steps;
+		this.debugType = 2;
+		this.outputInterval = 100;
+	}
+	
+	public ACO(int antCount, int steps, int debugType, int outputInterval) {
+		maxAnts = antCount;
+		this.steps = steps;
+		this.debugType = debugType;	
+		this.outputInterval = outputInterval;
 	}
 	
 	/**
@@ -75,9 +85,10 @@ public class ACO {
 							shortestPathLength = pathLength;
 							shortestPath = ant.getPath();
 							tryCount = 0;
-							if (DEBUG) {
-								//
-							}
+                            //Debug Informations
+                            if (debugType == 3 || debugType == 1) {
+                                System.out.println(getPrintString(stepCount, shortestPathLength, shortestPath));
+                            }
 						}
 						ant.reset();
 					} else {
@@ -91,6 +102,10 @@ public class ACO {
 						ant.reset();
 					} else {
 						ant.moveTo(target);
+                        //Debug Informations
+	                    if (debugType == 3) {
+	                        System.out.println(getPrintString(ant));
+	                    }
 					}
 				}
 			}
@@ -98,6 +113,10 @@ public class ACO {
 			resetPheroMatrix(tempPheroMatrix, 0);
 			++stepCount;
 			++tryCount;
+            //Debug Informations
+            if (debugType == 2 && stepCount % outputInterval == 0) {
+                System.out.println(getPrintString(stepCount, shortestPathLength, shortestPath));
+            }
 		}
 		return shortestPath;
 	}
@@ -221,4 +240,14 @@ public class ACO {
 		}
 		return pheroMatrix;
 	}
+	
+    private String getPrintString(int stepCount, int shortestPathLength, List<Integer> shortestPath) {
+
+        return "Step " + stepCount + "=> shortest Path: " + shortestPath + ", Length: " + shortestPathLength;
+    }
+
+    private String getPrintString(IAnt ant) {
+        return "Ant " + ant + "=> " + ant.getPath();
+
+    }
 }
