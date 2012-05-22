@@ -48,14 +48,14 @@ public class Test {
         System.out.println(graph.getPathLength(path) + " " + path + " | Lsg: 0 1 2 0  L: 9");
         
         System.out.println("### Teste grossen unvollstaendigen Graphen aus Uni File ###");
-        io = new IOManager("./ftv170.atsp"); 
+        io = new IOManager("./atsp/ftv170.atsp"); 
         graph = GraphFactory.createDiGraph(io.readDigraphMatrixFromUniFile());
         path = algo.shortestPath(graph, 0);
         System.out.println(graph.getPathLength(path) + " " + path + " | L: 2755");   
         
-      /*  System.out.println("### Teste grossen vollstaendigen Graphen aus Uni File ###");
-        io = new IOManager("./tsp/gr24.tsp"); //LSG 2755
-        graph = GraphFactory.createDiGraph(io.readDigraphMatrixFromUniFile());*/
+       System.out.println("### Teste kleinen ungerichteten vollstaendigen Graphen aus Uni File ###");
+        io = new IOManager("./tsp/gr24.tsp"); 
+        graph = GraphFactory.createDiGraph(io.readGraphMatrixFromUniFile());
         
         path = algo.shortestPath(graph, 0);
         System.out.println(graph.getPathLength(path) + " " + path + " | Lsg: 0 1 2 0  L: 9");          

@@ -265,6 +265,71 @@ public class IOManager {
 		}
 	}
 
+	public int[][] readGraphMatrixFromUniFile() {
+
+		int[][] failMatrix = { { 0, 1, 2 }, { 1, 0, 1 }, { 2, 1, 0 } };
+		try {
+			BufferedReader input = new BufferedReader(new InputStreamReader(
+					new FileInputStream(filePath)));
+			try {
+				String s;
+				int dimension;
+				do {
+					s = input.readLine();
+				} while (s != null && !s.contains("DIMENSION:"));
+				dimension = Integer.parseInt(s.substring(
+						("DIMENSION:").length()).trim());
+
+				// -- Folgender Codeblock sucht den Anfang der
+				// EDGE_WEIGHT_SECTION
+				do {
+					s = input.readLine();
+				} while (s != null && !s.contains("EDGE_WEIGHT_SECTION"));
+
+				// -- Folgender Codeblock sucht das Ende der EDGE_WEIGHT_SECTION
+				// -- Markierung ist EOF
+				// -- und hängt alle Zeilen mit Informationen zu Kantenlängen
+				// -- an einen StringBuilder
+				StringBuilder sb = new StringBuilder();
+				s = input.readLine();
+				while (s != null && !s.trim().equals("EOF")) {
+					sb.append(s);
+					s = input.readLine();
+				}
+				int index = sb.indexOf("  ");
+				while (index >= 0) {
+					sb.deleteCharAt(index);
+					index = sb.indexOf("  ");
+				}
+
+				// -- Kantenlängen sind jetzt im Stringbuilder
+				String[] xAry = sb.toString().trim().split(" ");
+
+				// -- Ab hier unveränderter Code
+				int[][] matrix = new int[dimension][dimension];
+
+				for (int y = 0; y < matrix.length; y++) {
+					for (int x = 0; x < matrix[0].length; x++) {
+						if (y != x) {
+							matrix[y][x] = Integer.parseInt(xAry[y
+									* matrix.length + x]);
+						} else {
+							// matrix[y][x] = -1;
+						}
+					}
+				}
+				input.close();
+				return matrix;
+			} catch (IOException e) {
+				System.out.println("IOException: " + e.getMessage());
+				return failMatrix;
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println("File not found!");
+			return failMatrix;
+		}
+	}
+
 	public int readDimension() {
 		int dimension = 0;
 
