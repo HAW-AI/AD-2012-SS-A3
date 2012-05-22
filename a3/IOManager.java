@@ -36,7 +36,7 @@ public class IOManager {
 	 *         falls ein Fehler auftritt, wird ein normalisierter Graph der
 	 *         Groesse 3 zurueckgegeben
 	 */
-	public int[][] readMatrix() {
+	public int[][] readGraphMatrixFromSimFile() {
 
 		int[][] failMatrix = { { 0, 1, 2 }, { 1, 0, 1 }, { 2, 1, 0 } };
 		try {

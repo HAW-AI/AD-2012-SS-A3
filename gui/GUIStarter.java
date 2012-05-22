@@ -11,7 +11,7 @@ import a3.IOManager;
 public class GUIStarter {
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
-		JPanel panel = new DrawPanel(GraphFactory.createGraph(new IOManager("src/simGraph(10).txt").readMatrix()));
+		JPanel panel = new DrawPanel(GraphFactory.createGraph(new IOManager("src/simGraph(10).txt").readGraphMatrixFromSimFile()));
 		frame.getContentPane().add(panel);
 		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		frame.pack();
