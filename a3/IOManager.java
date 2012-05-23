@@ -172,15 +172,13 @@ public class IOManager {
 		Random rand = new Random(seed);
 		int[][] result = new int[size][size];
 		// Wertepoole erzeugen
-		int[] pool = new int[maxdistance
-				+ (int) ((1 - chanceofcorrupted) * maxdistance)];
-
+		int[] pool = new int[(int) (maxdistance + (1 - chanceofcorrupted) * maxdistance)];
+		
 		for (int i = 0; i < (maxdistance); i++) {
 			pool[i] = -1;
 		}
 
-		for (int i = maxdistance; i < (int) (maxdistance + (1 - chanceofcorrupted)
-				* maxdistance); i++) {
+		for (int i = maxdistance; i < (int) (maxdistance + (1 - chanceofcorrupted) * maxdistance); i++) {
 			pool[i] = i + 1 - maxdistance;
 		}
 		for (int i = 0; size > i; i++) {

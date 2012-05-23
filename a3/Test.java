@@ -39,7 +39,7 @@ public class Test {
         System.out.println(graph.getPathLength(path) + " " + path + " | Lsg: Unbekannt");
         
         System.out.println("### Teste kleinen unvollstaendigen Graphen mit Loesung ###");
-        io = new IOManager("./digraph/digraph.txt"); //LSG 0 1 2 0 L:9
+        io = new IOManager("src/digraph/digraph.txt"); //LSG 0 1 2 0 L:9
         graph = GraphFactory.createDiGraph(io.readDigraphMatrixFromUniFile());
         path = algo.shortestPath(graph, 0);
         System.out.println(graph.getPathLength(path) + " " + path + " | Lsg: 0 1 2 0  L: 9");
@@ -49,20 +49,20 @@ public class Test {
         System.out.println(graph.getPathLength(path) + " " + path + " | Lsg: 0 1 2 0  L: 9");
         
         System.out.println("### Teste grossen unvollstaendigen Graphen aus Uni File ###");
-        io = new IOManager("./atsp/ftv170.atsp"); 
+        io = new IOManager("src/atsp/ftv170.atsp"); 
         graph = GraphFactory.createDiGraph(io.readDigraphMatrixFromUniFile());
         path = algo.shortestPath(graph, 0);
         System.out.println(graph.getPathLength(path) + " " + path + " | L: 2755");   
         
         System.out.println("### Teste kleinen ungerichteten vollstaendigen Graphen aus Uni File ###");
-        io = new IOManager("./tsp/gr24.tsp"); 
+        io = new IOManager("src/tsp/gr24.tsp"); 
         graph = GraphFactory.createGraph(io.readGraphMatrixFromUniFile());
         
         path = algo.shortestPath(graph, 0);
         System.out.println(graph.getPathLength(path) + " " + path + " | ");          
         
         System.out.println("### Teste symmetrische ###");
-        io = new IOManager("./simGraph("+ GRAPH +").txt");
+        io = new IOManager("src/simGraph("+ GRAPH +").txt");
         graph = GraphFactory.createGraph(io.readGraphMatrixFromSimFile());
         int bestSolution = io.readBestSolution();
         int totaldiff = 0;
@@ -73,16 +73,16 @@ public class Test {
             path = algo.shortestPath(graph, 0);
             int w = graph.getPathLength(path);
             int diff = w-bestSolution;
-            System.out.println("Weglï¿½nge: "+ w + "("+ (diff)+")");
+            System.out.println("Weglänge: "+ w + "("+ (diff)+")");
             maxdiff = Math.max(maxdiff, diff);
             totaldiff += diff;
             if (diff > 0)
                 ++fails;
         }
         System.out.println("-------------------------------------");
-        System.out.println("Erfolgsquote:     " + String.format("%.2f",(RUNS-fails)*100.0/RUNS) + "%   (" + fails + " Fehler in " + RUNS + " Durchlï¿½ufen)");
+        System.out.println("Erfolgsquote:     " + String.format("%.2f",(RUNS-fails)*100.0/RUNS) + "%   (" + fails + " Fehler in " + RUNS + " Durchläufen)");
         System.out.println("Gesamtdifferenz:  " + totaldiff);
-        System.out.println("Grï¿½ï¿½te Differenz: " + maxdiff);
+        System.out.println("Größte Differenz: " + maxdiff);
         System.out.println("Durchschntl.Diff: " + String.format("%.2f", (((double)totaldiff)/RUNS)));
         System.out.println("-------------------------------------");
     }
