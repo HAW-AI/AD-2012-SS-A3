@@ -22,14 +22,7 @@ public class ISOMGraphLayout {
 	public enum Distris {RECTANGULAR, TRIANGULAR, CIRCULAR;}
 	Distris distribution = Distris.RECTANGULAR;
 	
-	/**
-	 * Maximale Anzahl an möglichen Schritten.
-	 */
-	public static final int MAXSTEPS = 1000;
-	
-	private final IGraph graph;
 	private final int maxSteps;
-	
 	private final int minX;
 	private final int minY;
 	private final int maxX;
@@ -40,14 +33,9 @@ public class ISOMGraphLayout {
 	 */
 	private final int minRadius = 0;
 	private final int radiusConstantTime = 100;
-	
 	private final double initialAdaption = 0.8;
 	private final double minAdaption = 0.01;
-	
 	private final double coolingFactor = 0.4;
-	
-	private final boolean tabooEnabled = false;
-	private final int tabooDist = 60;
 	
 	private double adaption = initialAdaption;
 	private double lastX;
@@ -58,8 +46,7 @@ public class ISOMGraphLayout {
 	private List<Node> nodes;
 	
 	public ISOMGraphLayout(IGraph graph, int maxSteps, int width, int height, int margin) {
-		this.graph = graph;
-		this.maxSteps = (maxSteps > MAXSTEPS ? MAXSTEPS : (maxSteps < 1 ? MAXSTEPS : maxSteps));
+		this.maxSteps = maxSteps;
 		this.minX = margin;
 		this.minY = margin;
 		this.maxX = width - margin;
@@ -98,8 +85,52 @@ public class ISOMGraphLayout {
 	 */
 	public List<Node> getNextLayout() {
 		if (currentStep < maxSteps) {
-			adjustNodes();
-			updateParameters();
+			// Alle Nodes zurücksetzen
+			for (Node n : nodes) {
+				n.visited = false;
+				n.distance = 0;
+			}
+			
+			// Durch Zufall einen neuen Punkt berechnen
+			do {
+				lastX = minX + (maxX - minX) * Math.random();
+				lastY = minY + (maxY - minY) * Math.random();
+			} while (!insideDistribution(lastX, lastY));
+			
+	  		Node winner = closestNode(lastX, lastY);
+	  		winner.visited = true;
+	  		
+	  		Queue<Node> queue = new ArrayBlockingQueue<Node>(nodes.size()); 
+	  		queue.add(winner);
+	  		
+			while (!queue.isEmpty()) {
+				Node current = queue.poll();
+
+				double dx = lastX - current.x;
+				double dy = lastY - current.y;
+				double factor = adaption / Math.pow(2, current.distance);
+				current.update(factor * dx, factor * dy);
+
+				if (current.distance < radius) {
+					for (Node child : current.succ) {
+						if (!child.visited && insideDistribution(child.x, child.y)) {
+							child.visited = true;
+							child.distance = current.distance + 1;
+							queue.add(child);
+						}
+					}
+				}
+			}
+			
+			// Update der Parameter
+			currentStep++;
+			// negative exponential cooling:
+			factor = Math.exp(-1 * coolingFactor * (double) currentStep / maxSteps);
+			adaption = Math.max(minAdaption, factor * initialAdaption);
+
+			if ((radius > minRadius) && (0 == currentStep % radiusConstantTime)) {
+				radius -= 1;
+			}
 		}
 		
 		return nodes;
@@ -111,50 +142,6 @@ public class ISOMGraphLayout {
 	 */
 	public boolean isDone() {
 		return currentStep >= maxSteps;
-	}
-	
-	/**
-	 * Update der Ecken.
-	 */
-	private void adjustNodes() {
-		// Alle Nodes zurücksetzen
-		for (Node n : nodes) {
-			n.visited = false;
-			n.distance = 0;
-		}
-		
-		// Durch Zufall einen neuen Punkt berechnen
-		do {
-			lastX = minX + (maxX - minX) * Math.random();
-			lastY = minY + (maxY - minY) * Math.random();
-		} while (!insideDistribution(lastX, lastY));
-		
-  		Node winner = closestNode(lastX, lastY);
-  		winner.visited = true;
-  		
-  		Queue<Node> queue = new ArrayBlockingQueue<Node>(nodes.size()); 
-  		queue.add(winner);
-  		
-		while (!queue.isEmpty()) {
-			Node current = queue.poll();
-
-			double dx = lastX - current.x;
-			double dy = lastY - current.y;
-			double factor = adaption / Math.pow(2, current.distance);
-			current.update(factor * dx, factor * dy);
-
-			if (current.distance < radius) {
-				for (Node child : current.succ) {
-					if (!child.visited && insideDistribution(child.x, child.y)) {
-						child.visited = true;
-						child.distance = current.distance + 1;
-						queue.add(child);
-					}
-				}
-			}
-		}
-
-		if (tabooEnabled) tabooCheck();
 	}
 	
 	/**
@@ -209,59 +196,4 @@ public class ISOMGraphLayout {
              return true;
         }
     }
-	
-    /**
-     * Bewegt die Ecken auseinander, falls sie zu dicht aufeinander liegen.
-     */
-	private void tabooCheck() {
-		for (Node checkNode : nodes) {
-			for (Node otherNode : nodes) {
-				double dx = checkNode.x - otherNode.x;
-				double dy = checkNode.y - otherNode.y;
-				double dist = Math.sqrt(Math.pow(dx, 2.0) + Math.pow(dy, 2.0));
-				if (dist < tabooDist) {
-					if (checkNode.visited) {
-						double x_translat = checkNode.x - checkNode.oldX;
-						double y_translat = checkNode.y - checkNode.oldY;
-						double translation = Math.sqrt(Math .pow(x_translat, 2.0) + Math.pow(y_translat, 2.0));
-						double clip_factor = 1 - ((double) tabooDist - dist) / translation;
-						
-						checkNode.x = checkNode.oldX + clip_factor * x_translat;
-						checkNode.y = checkNode.oldY + clip_factor * y_translat;
-					} else if (otherNode.visited) {
-						double x_translat = otherNode.x - otherNode.oldX;
-						double y_translat = otherNode.y - otherNode.oldY;
-						double translation = Math.sqrt(Math.pow(x_translat, 2.0) + Math.pow(y_translat, 2.0));
-						double clip_factor = 1 - ((double) tabooDist - dist) / translation;
-						
-						otherNode.x = otherNode.oldX + clip_factor * x_translat;
-						otherNode.y = otherNode.oldY + clip_factor * y_translat;
-					}
-				}
-			}
-		}
-	}
-    
-    /**
-     * Update der Parameter.
-     */
-	private void updateParameters() {
-		currentStep++;
-		// negative exponential cooling:
-		factor = Math.exp(-1 * coolingFactor * (double) currentStep / maxSteps);
-		adaption = Math.max(minAdaption, factor * initialAdaption);
-
-		// apparently it is not a good idea to update just a single node in isolation (radius = 0)
-		if ((radius > minRadius) && (0 == currentStep % radiusConstantTime)) {
-			radius -= 1;
-		}
-	}
-    
-    /**
-     * Liefert den derzeitigen Graphen zurück.
-     * @return derzeitiger Graph
-     */
-	public IGraph getGraph() {
-		return graph;
-	}
 }

@@ -2,11 +2,7 @@ package a3;
 
 import java.io.*;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * IOManager zum Laden von Graphen aus Dateien und zur Ausgabe von Logs.

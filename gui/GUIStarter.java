@@ -1,22 +1,23 @@
 package gui;
 
 import graph.GraphFactory;
+import graph.IGraph;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import a3.IOManager;
 
+/**
+ * Klasse zum Starten der GUI. Derzeitig noch keine interaktive Auswahl von Graphen.
+ */
 public class GUIStarter {
 	public static void main(String[] args) {
-		JFrame frame = new JFrame();
-		JPanel panel = new DrawPanel(GraphFactory.createGraph(new IOManager("src/simGraph(10).txt").readGraphMatrixFromSimFile()));
-		frame.getContentPane().add(panel);
-		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+					// GraphFactory.createGraph(new IOManager("src/simGraph(10).txt").readGraphMatrixFromSimFile());
+		IGraph graph = GraphFactory.createDiGraph(IOManager.RandomDistanceMatrix(1338, 200, 50, 0.7));
+		JFrame frame = new MainFrame(graph, "Graph Viewer");
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
-		
-		new Thread((Runnable) panel).run();
 	}
 }

@@ -3,9 +3,11 @@ package gui;
 import graph.IGraph;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,48 +15,139 @@ import javax.swing.JPanel;
 
 import a3.ACO;
 
-public class DrawPanel extends JPanel implements Runnable  {
+/**
+ * Panel zur Anzeige des Graphen und dem errechneten kürzesten Pfades.
+ */
+public class DrawPanel extends JPanel implements Runnable, MouseListener, MouseMotionListener {
 	private static final long serialVersionUID = 1L;
-    private final static int STEPS = 500;
-    private final static int ANTS = 1500;
-	
+    private static final int ANTS = 1500;
+    private static final int STEPS = 500;
+    private static final int HEIGHT = 811;
+    private static final int WIDTH = 1360;
+    
 	private final ACO algo;
 	private final IGraph graph;
 	private final ISOMGraphLayout layout;
+	private final Thread thread;
 	
-	final Color borderColor = Color.black;
-	final Color normalColor = new Color(250, 220, 100);
-	final Color pathColor = Color.red;
-	//final Color selectColor = Color.pink;
+	private final Color borderColor = Color.black;
+	private final Color normalColor = new Color(250, 220, 100);
+	private final Color pathColor = Color.red;
+	private final Color pickColor = Color.orange;
 	
-	List<Integer> path = new ArrayList<Integer>();
+	private List<Integer> path = null;
+	private List<Node> nodes;
+	private boolean showAllEdges = true;
+	private Node pick = null;
 	
+	/**
+	 * Konstruktor mit Übergabe des anzuzeigenden Graphen.
+	 * @param graph	anzuzeigender Graph
+	 */
 	public DrawPanel(IGraph graph) {
 		this.graph = graph;
 		this.algo = new ACO(ANTS, STEPS);
-		this.layout = new ISOMGraphLayout(graph, STEPS, 800, 600, 50);
+		this.layout = new ISOMGraphLayout(graph, 100 * graph.getNumberOfVertices(), WIDTH, HEIGHT, 50);
 		
-		setPreferredSize(new Dimension(800, 600));
-
-		new Thread(new WorkerThread(this, algo, graph)).run();
+		// Algorithmenthread
+		new Thread(new WorkerThread(this, algo, graph)).start();
+		// Zeichenthread
+		thread = new Thread(this);
+		thread.start();
+		// Mouse Listener
+		addMouseListener(this);
+		addMouseMotionListener(this);
 	}
 	
-	public void paintNodes() {		
-		Graphics g = getGraphics();
+	/**
+	 * Paint-Methode von JComponent, die das Panel und damit den Graphen + Pfad zeichnet.
+	 * @param g 	Graphics-Object auf dem gezeichnet werden soll
+	 */
+	@Override
+	public void paint(Graphics g) {
+		if (g == null) return;
+		FontMetrics fm = getFontMetrics(getFont());
+		
+		// Hintergrund
 		g.setColor(getBackground());
 		g.fillRect(0, 0, getWidth(), getHeight());
 		
-		for (Node n : layout.getNextLayout()) {
-			paintNode(g, n, path);
-			paintEdges(g, n, path);
+		nodes = layout.getNextLayout();
+		
+		// Kanten malen
+		if (showAllEdges) {
+			List<Node> done = new ArrayList<Node>();
+			for (Node n : nodes) {
+				for (Node m : nodes) {
+					if (n == m) continue;
+					if (done.contains(m)) continue;
+					if (graph.edgeWeight(n.nr, m.nr) == IGraph.NON_EXISTING_EDGE) continue;
+					paintEdge(g, n, m, borderColor);
+				}
+				done.add(n);
+			}
+		}
+		
+		// Weg malen
+		if (path != null) {
+			for (int i = 0; i < path.size() - 1; i++) {
+				Node n = findNode(nodes, path.get(i));
+				Node m = findNode(nodes, path.get(i+1));
+				
+				if (n != null && m != null) paintEdge(g, n, m, pathColor);
+			}
+			
+		}
+		
+		// String in die Ecke schreiben
+		g.setColor(borderColor);
+		if (path == null) {
+			g.drawString("Path: Not found yet!", 0, HEIGHT - fm.getHeight() * 2);
+			g.drawString("Len : -1", 0, HEIGHT - fm.getHeight());
+		}
+		else {
+			g.drawString("Path: "+path, 0, HEIGHT - fm.getHeight() * 2);
+			g.drawString("Len : "+graph.getPathLength(path), 0, HEIGHT - fm.getHeight());
+		}
+			
+		// Ecken malen
+		for (Node n : nodes) {
+			paintNode(g, n, path, fm);
 		}
 	}
 	
-	private void paintNode(Graphics g, Node n, List<Integer> path) {
-		FontMetrics fm = getFontMetrics(getFont());
+	/**
+	 * Aktiviert/deaktiviert die Anzeige der Kanten, die nicht zum kürzesten Pfad gehören.
+	 */
+	public void toggleEdgeDisplay() {
+		showAllEdges = !showAllEdges;
+		repaint();
+	}
+	
+	/**
+	 * Findet das Node in der Liste mit der gegebenen Nummer.
+	 * @param nodes	Liste der Nodes
+	 * @param nr	gesuchte Nummer
+	 * @return	Node mit der Nummer, sonst null
+	 */
+	private Node findNode(List<Node> nodes, int nr) {
+		for (Node n : nodes) {
+			if (n.nr == nr) return n;
+		}
+		return null;
+	}
+	
+	/**
+	 * Zeichnet ein Node an seiner Position.
+	 * @param g		Graphics-Object auf dem gezeichnet werden soll
+	 * @param n		das zu zeichnende Node
+	 * @param path	Liste des Pfades
+	 * @param fm	Metriken des benutzen Fonts
+	 */
+	private void paintNode(Graphics g, Node n, List<Integer> path, FontMetrics fm) {
 		int x = (int) n.x;
 		int y = (int) n.y;
-		g.setColor(n.nr == 0 ? pathColor : normalColor);
+		g.setColor(pick == n ? pickColor : path != null && path.size() > 0 && n.nr == path.get(0) ? pathColor : normalColor);
 		int w = fm.stringWidth(n.lbl) + 10;
 		int h = fm.getHeight() + 4;
 		
@@ -64,38 +157,93 @@ public class DrawPanel extends JPanel implements Runnable  {
 		g.drawString(n.lbl, x - (w - 10) / 2, (y - (h - 4) / 2) + fm.getAscent());
 	}
 	
-    private void paintEdges(Graphics g, Node n, List<Integer> path) {
-        int x = (int) n.x;
-        int y = (int) n.y;
-        
-        for (Node child : n.succ) {
-        	int i = path.get(n.nr);
-        	g.setColor((path.get(child.nr) == i - 1 || path.get(child.nr) == i + 1 || 
-        			(child.nr == 0 && path.get(n.nr) == path.size() - 2)) ? pathColor : borderColor);
-        	g.drawLine(x, y, (int)child.x, (int)child.y);
-        }
+	/**
+	 * Zeichnet eine Kante von den gegebenen Nodes mit der Farbe.
+	 * @param g		Graphics-Object auf dem gezeichnet werden soll
+	 * @param start	Startnode
+	 * @param end	Endnode
+	 * @param color	Farbe der Kante
+	 */
+    private void paintEdge(Graphics g, Node start, Node end, Color color) {        
+        g.setColor(color);
+    	g.drawLine((int) start.x, (int) start.y, (int) end.x, (int) end.y);
     }
 
+    /**
+     * Setzt den kürzsten Pfad (durch den Arbeiterthread)
+     * @param path	kürzester Pfad
+     */
     synchronized void setPath(List<Integer> path) {
     	this.path = path;
     	System.out.println("Errechneter Pfad: "+path+" Len: "+graph.getPathLength(path));
     }
     
+    /**
+     * Run-Methode, die die Anzeige aktualisiert, während der Graph sich ordnet.
+     */
 	@Override
-	public void run() {
-		while (true) {
+	public void run() {		
+		while (!layout.isDone()) {
 			try {
-				if (layout.isDone()) {
-					Thread.sleep(200);
-				}
-				else {
-					Thread.sleep(10);
-				}
+				Thread.sleep(10);
+				if (getGraphics() != null) paint(getGraphics());
 			}
 			catch (InterruptedException e) {
 			}
-			
-			paintNodes();
 		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {	
+		if (e.getButton() != MouseEvent.BUTTON1) return;
+		
+		FontMetrics fm = getFontMetrics(getFont());
+		int x = e.getX();
+		int y = e.getY();
+		
+		for (Node n : nodes) {
+			int w = fm.stringWidth(n.lbl) + 10;
+			int h = fm.getHeight() + 4;
+			
+			if (x >= n.x - w/2 && x <= n.x + w/2 && y >= n.y - h/2 && y <= n.y + h/2) {
+				pick = n;
+				pick.x = x;
+				pick.y = y;
+				break;
+			}
+		}
+		
+		repaint();
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		if (pick == null) return;
+		
+		pick.x = e.getX();
+		pick.y = e.getY();
+		repaint();
+	}
+	
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		pick = null;
+		repaint();
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
 	}
 }
