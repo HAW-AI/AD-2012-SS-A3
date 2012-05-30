@@ -1,10 +1,5 @@
 package a3;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import graph.IGraph;
 import java.util.*;
 
@@ -32,14 +27,14 @@ public class ACO {
 		this.debugType = 2;
 		this.outputInterval = 100;
 	}
-	
+
 	ACO(int antCount, int steps, int debugType, int outputInterval) {
 		maxAnts = antCount;
 		this.steps = steps;
 		this.debugType = debugType;	
 		this.outputInterval = outputInterval;
 	}
-	
+
 	/**
 	 * Liefert den kuerzesten Weg von der gegebenen Ecke ueber alle Anderen bis zu dieser zurueck.
 	 * @param graph 		Verwendeter Graph
@@ -69,7 +64,6 @@ public class ACO {
 		double[][] tempPheroMatrix = initPheroMatrix(pheroMatrix.length, 0);
 
 		while (tryCount < maxTryCount && stepCount < steps) {
-			
 			if (ants.size() < maxAnts)
 				ants.addAll(spawnAnts(ants.size(), start));
 
@@ -93,11 +87,11 @@ public class ACO {
 								}
 							}
 						}
-						ant.reset();
-					} else {
-						//Fang von vorne an
-						ant.reset();						
 					}
+
+					// Fang von vorne an
+					ant.reset();						
+
 				} else {
 					int target = choosePath(getRoutingMap(graph, ant,pheroMatrix));
 					// Falls die Ant in eine Sackgasse gelaufen ist, setzte sie wieder auf Start
