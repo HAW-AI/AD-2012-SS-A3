@@ -14,6 +14,18 @@ public interface IAnt {
 	List<Integer> getPath();
 	
 	/**
+	 * Gibt die Anzahl der Pakete zurück, die die Ameise tragen kann.
+	 * @return Anzahl der Pakete, die die Ameise trägt
+	 */
+	int getLoad();
+	
+	/**
+	 * Zieht Pakete von der Ladung der Ameise ab.
+	 * @param decreaseValue		Kapazität einer Ecke, die beliefert werden soll
+	 */
+	void decreaseLoad(int decreaseValue);
+	
+	/**
 	 * Gibt die Anzahl der besuchten Ecken zurück.
 	 * @return Anzahl der besuchten Ecken
 	 */
@@ -51,14 +63,26 @@ public interface IAnt {
 class Ant implements IAnt {
 	
 	private List<Integer> path;
+	private int load;
 	
 	/**
 	 * Konstuktor einer Ameise mit Übergabe der Startecke.
 	 * @param start		Index einer Ecke
 	 */
-	Ant(Integer start) {
+	Ant(Integer start, int load) {
 		path = new ArrayList<Integer>();
 		path.add(start);
+		this.load = load;
+	}
+	
+	@Override
+	public int getLoad() {
+		return load;
+	}
+	
+	@Override
+	public void decreaseLoad(int decreaseValue) {
+		load -= decreaseValue;
 	}
 	
 	@Override
