@@ -14,8 +14,8 @@ public interface IAnt {
 	List<Integer> getPath();
 	
 	/**
-	 * Gibt die Anzahl der Pakete zurück, die die Ameise tragen kann.
-	 * @return Anzahl der Pakete, die die Ameise trägt
+	 * Gibt die Anzahl der Pakete zurück, die die Ameise gerade trägt.
+	 * @return Anzahl der Pakete, die die Ameise gerade trägt
 	 */
 	int getLoad();
 	
