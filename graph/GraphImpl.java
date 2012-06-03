@@ -15,10 +15,10 @@ public class GraphImpl implements IGraph {
 
 	/**
      * Konstruktor eines Graphen mit Uebergabe der Distanzmatrix und der
-Eckenkapazitäten
+		Eckenkapazitäten
      * @precondition Die Anzahl der Elemente der Matrix muss quadratisch sein.
      * @precondition Die Anzahl der Elemente der Kapazitäten muss der
-Eckenanzahl entsprechen.
+		Eckenanzahl entsprechen.
      * @param distanceMatrix
      * @param capacities
      */
@@ -27,11 +27,12 @@ Eckenanzahl entsprechen.
             this.capacities = capacities;
     }
 
-
+    @Override
     public int getCapacityOfVertex(int vertex) {
             return this.capacities[vertex];
     }
 
+    @Override
     public boolean customersLeft() {
             for (int capacity : capacities) {
                     if (capacity > 0)

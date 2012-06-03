@@ -24,7 +24,7 @@ public interface IGraph {
 	 *  @return true wenn mindestestens ein Kunde noch nicht beliefert wurde
 	 *               false wenn alle Kunden beliefert wurden
 	 */
-    boolean customersLeft();
+	boolean customersLeft();
 	
 	/**
 	 * Gibt die Distanz zwischen zwei Ecken im Graphen zurueck gibt eine 0 zurueck, falls eine ungueltige Anfrage gestellt wurde.
