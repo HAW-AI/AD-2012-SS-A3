@@ -13,6 +13,20 @@ public interface IGraph {
 	public static final int NON_EXISTING_EDGE = -1;
 	
 	/**
+	 * Gibt den Paketbedarf eines Kundens zurück.
+	 *  @param vertex                Index des Kunden
+	 * @return Kapazität des Knotens
+	 */
+	int getCapacityOfVertex(int vertex);
+	
+	/**
+	 * Gibt zurück ob noch Kunden beliefert werden müssen
+	 *  @return true wenn mindestestens ein Kunde noch nicht beliefert wurde
+	 *               false wenn alle Kunden beliefert wurden
+	 */
+    boolean customersLeft();
+	
+	/**
 	 * Gibt die Distanz zwischen zwei Ecken im Graphen zurueck gibt eine 0 zurueck, falls eine ungueltige Anfrage gestellt wurde.
 	 * @preCondition vert1, vert2 > 0
 	 * @preCondition vert1, vert2 < Anzahl Knoten

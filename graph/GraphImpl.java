@@ -11,15 +11,34 @@ import java.util.Set;
 public class GraphImpl implements IGraph {
 
 	private final int[] distanceMatrix;
+	private int[] capacities;
 
 	/**
-	 * Konstruktor eines Graphen mit Uebergabe der Distanzmatrix.
-	 * @precondition Die Anzahl der Elemente der Matrix muss quadratisch sein.
-	 * @param distanceMatrix
-	 */
-	GraphImpl(int[] distanceMatrix) {
-		this.distanceMatrix = distanceMatrix;
-	}
+     * Konstruktor eines Graphen mit Uebergabe der Distanzmatrix und der
+Eckenkapazitäten
+     * @precondition Die Anzahl der Elemente der Matrix muss quadratisch sein.
+     * @precondition Die Anzahl der Elemente der Kapazitäten muss der
+Eckenanzahl entsprechen.
+     * @param distanceMatrix
+     * @param capacities
+     */
+    GraphImpl(int[] distanceMatrix, int[] capacities) {
+            this.distanceMatrix = distanceMatrix;
+            this.capacities = capacities;
+    }
+
+
+    public int getCapacityOfVertex(int vertex) {
+            return this.capacities[vertex];
+    }
+
+    public boolean customersLeft() {
+            for (int capacity : capacities) {
+                    if (capacity > 0)
+                            return true;
+            }
+            return false;
+    }
 
 	@Override
 	public int edgeWeight(int vert1, int vert2) {
@@ -70,7 +89,7 @@ public class GraphImpl implements IGraph {
 
 	@Override
 	public int getNumberOfVertices() {
-		return (int) Math.sqrt(distanceMatrix.length);
+		return capacities.length;
 	}
 	
 	@Override
