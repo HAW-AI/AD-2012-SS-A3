@@ -1,7 +1,9 @@
 package a3;
 
-import graph.IGraph;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 /**
  * Ant Colony Optimization Algorithmus fuer das Traveling Salesman Problem.
@@ -15,6 +17,8 @@ public class CVRP
     private final double VAPORIZE_RATE = 0.5;
     private final int outputInterval;
     private Random rand = new Random(1337);
+    
+    double[][] pheroMatrix = null;
 
     /**
      * Konstruktor des ACO Algorithmus.
@@ -64,13 +68,14 @@ public class CVRP
         int stepCount = 0;
         int tryCount = 0; // Falls nach maxTryCount keine neuer kuerzester Weg gefunden wurde terminiere
         int shortestPathLength = Integer.MAX_VALUE;
+        
 
         List<IAnt> ants = new ArrayList<IAnt>();
         ants.addAll(spawnAnts(this.antCount, start, graph.getCustomers()));
 
         List<Integer> shortestPath = new ArrayList<Integer>();
 
-        double[][] pheroMatrix = newPheroMatrix(graph.getNumberOfVertices(), 1);
+        this.pheroMatrix = newPheroMatrix(graph.getNumberOfVertices(), 1);
         double[][] tempPheroMatrix = newPheroMatrix(pheroMatrix.length, 0);
 
         while (tryCount < maxTryCount && stepCount < this.steps)
@@ -131,7 +136,7 @@ public class CVRP
                 ant.moveTo(nextVertex);
             }
 
-            vaporize(pheroMatrix, tempPheroMatrix);
+            vaporize(this.pheroMatrix, tempPheroMatrix);
             resetPheroMatrix(tempPheroMatrix, 0);
             ++stepCount;
             ++tryCount;
@@ -149,16 +154,42 @@ public class CVRP
     {
         Set<Integer> reachableVertices = graph.reachableAdjacencyVerticesOf(ant.currentPosition());
 
-        Set<Integer> bestVertices = new HashSet(reachableVertices);
+        List<Integer> bestVertices = new ArrayList(reachableVertices);
         bestVertices.retainAll(ant.getRemainingCustomers());
         
-        Set<Integer> potentialVertices = reachableVertices;
+        List<Integer> potentialVertices = new ArrayList(reachableVertices);
 
         if (ant.isGoingOut() && !bestVertices.isEmpty())
             potentialVertices = bestVertices;
+
         
-        return null;
+        
+        double[] attractiveness = new double [potentialVertices.size()];
+        double totalAttractiveness = 0.0;
+        
+        for (int vertex : potentialVertices)
+        {
+            attractiveness[vertex] = calculateAttractiveness(graph, ant.currentPosition(), vertex);
+            totalAttractiveness += attractiveness[vertex];
+        }
+        
+        int nextVertex = potentialVertices.get(0);
+        for (int i = 1; i < potentialVertices.size(); i++)
+        {
+            if (potentialVertices.get(i) > nextVertex)
+            nextVertex = i;
+        }
             
+            
+        return nextVertex;
+    }
+    
+    private double calculateAttractiveness(IGraph graph, int source, int target)
+    {
+        double influence = this.rand.nextFloat();
+
+        return Math.pow(graph.edgeWeight(source, target), influence )
+               * Math.pow(this.pheroMatrix[source][target], 1-influence);
     }
 
     /**
