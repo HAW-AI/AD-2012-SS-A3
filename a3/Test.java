@@ -50,7 +50,7 @@ public class Test {
     	//Loesung bei einer Ameisenkapazitaet von 3: {{0 1 2 0},{0 2 0}}  L: 10
     	
     	
-       	int[][] distancematrix6 = {{0,3,-1,1},{1,0,-1,-1},{7,1,0,7},{-1,-1,1,0}};
+       	int[][] distancematrix6 = {{0,2,-1,1},{1,0,-1,-1},{7,1,0,7},{-1,-1,1,0}};
     	int[] eckenkapazitaet6 = {0,3,1,1};
     	//Kombination distancematrix6, eckenkapazitaet6:
     	//Loesung bei einer Ameisenkapazitaet von >= 5: {{0 3 2 1 0}}  L: 4
