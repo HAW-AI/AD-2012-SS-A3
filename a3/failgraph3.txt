@@ -1,0 +1,24 @@
+DIMENSION : 7
+CAPACITY : 3
+
+EDGE_WEIGHT_SECTION
+    0    5    3    -1    -1    -1    -1
+    5    0    -1    2    -1    -1    -1
+    3    -1    0    7    -1    -1    -1
+    -1    2    7    0    1     -1    -1
+    -1    -1    -1   1    0    -1    -1
+    -1    -1    -1    -1    -1    0    5
+    -1    -1    -1    -1    -1    5    0
+
+DEMAND_SECTION
+1 0
+2 1
+3 1
+4 1
+5 1
+6 1
+7 1
+
+EOF
+
+COMMENT : Unzusammenhaengender Graph (Ecke 6 & 7 sind mit dem Rest nicht verbunden) => sollte nicht geladen werden
