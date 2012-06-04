@@ -54,7 +54,7 @@ public class Test {
     	int[] eckenkapazitaet6 = {0,3,1,1};
     	//Kombination distancematrix6, eckenkapazitaet6:
     	//Loesung bei einer Ameisenkapazitaet von >= 5: {{0 3 2 1 0}}  L: 4
-    	//Loesung bei einer Ameisenkapazitaet von 3 : {{0 1 0},{0 3 2 1 0}}  L: 8 
+    	//Loesung bei einer Ameisenkapazitaet von 3 : {{0 1 0},{0 3 2 1 0}}  L: 7 
     	
     	
     	
