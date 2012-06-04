@@ -1,0 +1,25 @@
+NAME : eil7
+COMMENT : (Eilon et al.)
+TYPE : CVRP
+DIMENSION : 7
+EDGE_WEIGHT_TYPE : EXPLICIT
+EDGE_WEIGHT_FORMAT: LOWER_COL 
+DISPLAY_DATA_TYPE: NO_DISPLAY
+CAPACITY : 3
+EDGE_WEIGHT_SECTION
+    0     10    20    25    25    20    10
+    10     0    12    20    25    30    20
+    20    12     0    10    11    22    30 
+    25    20    10     0     2    11    25
+    25    25    11     2     0    10    20
+    20    30    22    11    10     0    12
+    10    20    30    25    20    12     0
+DEMAND_SECTION
+0 0
+1 1
+2 1
+3 1
+4 1
+5 1
+6 1
+EOF
