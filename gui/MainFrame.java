@@ -2,7 +2,7 @@ package gui;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-import graph.IGraph;
+import a3.IGraph;
 
 import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;

@@ -1,7 +1,7 @@
 package gui;
 
-import graph.GraphFactory;
-import graph.IGraph;
+import a3.GraphFactory;
+import a3.IGraph;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;

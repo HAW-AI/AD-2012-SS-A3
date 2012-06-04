@@ -1,23 +1,20 @@
-package graph;
+package a3;
 
 import java.util.Random;
 
 /**
  * Klasse zur Erstellung von Graphen aus Distanzmatrizen oder mit Zufallswerten.
  */
-public final class GraphFactory {
-
-    private GraphFactory() {
-    }
+public abstract class GraphFactory {
 
     /**
      * Erstellt einen Graphen aus einer Distanzmatrix..
      * @preCondition alle Werte der Matrix x | x > 0
      * @preCondition distanceMatrix muss quadratisch sein
      * @preCondition distanceMatrix muss symmetrisch sein
-     * @preCondition alle Werte der Hauptdiagonalen müssen den Wert 0 besitzen
+     * @preCondition alle Werte der Hauptdiagonalen mï¿½ssen den Wert 0 besitzen
      * @param distanceMatrix	Distanzmatrix
-     * @return erzeugter Graph (normalisierter Graph der Größe 3, falls die preConditions nicht erfüllt wurden)
+     * @return erzeugter Graph (normalisierter Graph der Grï¿½ï¿½e 3, falls die preConditions nicht erfï¿½llt wurden)
      */
     public static IGraph createGraph(int[][] distanceMatrix) {
         // int[] Matrix erzeugen
@@ -28,7 +25,7 @@ public final class GraphFactory {
             }
         }
 
-        // Alle Werte müssen positiv sein, die Matrix muss symmetrisch sein und die Hauptdiagonale 0
+        // Alle Werte mï¿½ssen positiv sein, die Matrix muss symmetrisch sein und die Hauptdiagonale 0
         for (int i = 0; i < distanceMatrix.length; i += 1) {
             for (int j = i; j < distanceMatrix.length; j += 1) {
                 if (dMatrix[(distanceMatrix.length * i + j)] < 0
@@ -45,9 +42,9 @@ public final class GraphFactory {
      * Erstellt einen DiGraphen aus einer Distanzmatrix.
      * @preCondition alle Werte der Matrix x | x > 0
      * @preCondition distanceMatrix muss quadratisch sein
-     * @preCondition alle Werte der Hauptdiagonalen müssen den Wert 0 besitzen
+     * @preCondition alle Werte der Hauptdiagonalen mï¿½ssen den Wert 0 besitzen
      * @param distanceMatrix	Distanzmatrix
-     * @return erzeugter Graph (normalisierter Graph der Größe 3, falls die preConditions nicht erfüllt wurden)
+     * @return erzeugter Graph (normalisierter Graph der Grï¿½ï¿½e 3, falls die preConditions nicht erfï¿½llt wurden)
      */
     public static IGraph createDiGraph(int[][] distanceMatrix) {
         // int[] Matrix erzeugen
@@ -58,7 +55,7 @@ public final class GraphFactory {
             }
         }
 
-        // Alle Werte müssen positiv sein (außer bei einer nicht existenten Kante), Hauptdiagonale muss 0 sein
+        // Alle Werte mï¿½ssen positiv sein (auï¿½er bei einer nicht existenten Kante), Hauptdiagonale muss 0 sein
         for (int i = 0; i < distanceMatrix.length; i += 1) {
             for (int j = i; j < distanceMatrix.length; j += 1) {
                 if ((dMatrix[(distanceMatrix.length * i + j)] < 0 && dMatrix[(distanceMatrix.length * i + j)] != IGraph.NON_EXISTING_EDGE)
@@ -71,15 +68,15 @@ public final class GraphFactory {
     }
 
     /**
-     * Erstellt einen symmetrischen Graphen mit zufällig generierten Kantengewichtung im Bereich von 1-100.
+     * Erstellt einen symmetrischen Graphen mit zufï¿½llig generierten Kantengewichtung im Bereich von 1-100.
      * @preCondition numberOfVertices >= 3
      * @param numberOfVertices	Anzahl der Ecken
-     * @param randSeed			Eingabe für den Zufallsgenerator
-     * @return erzeugter Graph (Graph mit 3 Ecken, falls die preCondition nicht erfüllt wurde)
+     * @param randSeed			Eingabe fï¿½r den Zufallsgenerator
+     * @return erzeugter Graph (Graph mit 3 Ecken, falls die preCondition nicht erfï¿½llt wurde)
      */
     public static IGraph createRandomGraph(int numberOfVertices, long randSeed) {
         Random rand = new Random(randSeed);
-        // Prüfung auf gültige Werten, ansonsten Standardwert
+        // Prï¿½fung auf gï¿½ltige Werten, ansonsten Standardwert
         if (numberOfVertices < 3) {
             numberOfVertices = 3;
         }
@@ -105,10 +102,10 @@ public final class GraphFactory {
      * Die Gewichtung wird durch die Differenz zweier Knoten bestimmt z.B. distance(1,2) = 1; distance(1,4) = 3; etc.
      * @preCondition numberOfVertices >= 3
      * @param numberOfVertices	Anzahl der Ecken
-     * @return erzeugter Graph (Graph mit 3 Ecken, falls die preCondition nicht erfüllt wurde)
+     * @return erzeugter Graph (Graph mit 3 Ecken, falls die preCondition nicht erfï¿½llt wurde)
      */
     public static IGraph createNormalizedGraph(int numberOfVertices) {
-        // Prüfung auf gültige Werten, ansonsten Standardwert
+        // Prï¿½fung auf gï¿½ltige Werten, ansonsten Standardwert
         if (numberOfVertices < 3) {
             numberOfVertices = 3;
         }

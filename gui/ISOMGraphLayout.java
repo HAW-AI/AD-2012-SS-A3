@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import graph.IGraph;
+import a3.IGraph;
 
 /**
  * ISOM Graph Layouter zur Darstellung von Graphen.
@@ -17,7 +17,7 @@ import graph.IGraph;
  */
 public class ISOMGraphLayout {
 	/**
-	 * Enum für die Art der Verteilung der Nodes.
+	 * Enum fï¿½r die Art der Verteilung der Nodes.
 	 */
 	public enum Distris {RECTANGULAR, TRIANGULAR, CIRCULAR;}
 	Distris distribution = Distris.RECTANGULAR;
@@ -85,7 +85,7 @@ public class ISOMGraphLayout {
 	 */
 	public List<Node> getNextLayout() {
 		if (currentStep < maxSteps) {
-			// Alle Nodes zurücksetzen
+			// Alle Nodes zurï¿½cksetzen
 			for (Node n : nodes) {
 				n.visited = false;
 				n.distance = 0;
@@ -171,7 +171,7 @@ public class ISOMGraphLayout {
 	}
 	
 	/**
-	 * Prüft, ob ein Punkt innerhalb der Verteilung liegt.
+	 * Prï¿½ft, ob ein Punkt innerhalb der Verteilung liegt.
 	 * @param x		X-Koordinate des Punktes
 	 * @param y		Y-Koordinate des Punktes
 	 * @return true, falls der Punkt innerhalb der Verteilung liegt, false sonst

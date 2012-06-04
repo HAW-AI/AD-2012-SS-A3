@@ -1,6 +1,6 @@
 package gui;
 
-import graph.IGraph;
+import a3.IGraph;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import a3.ACO;
 
 /**
- * Panel zur Anzeige des Graphen und dem errechneten kürzesten Pfades.
+ * Panel zur Anzeige des Graphen und dem errechneten kï¿½rzesten Pfades.
  */
 public class DrawPanel extends JPanel implements Runnable, MouseListener, MouseMotionListener {
 	private static final long serialVersionUID = 1L;
@@ -41,7 +41,7 @@ public class DrawPanel extends JPanel implements Runnable, MouseListener, MouseM
 	private Node pick = null;
 	
 	/**
-	 * Konstruktor mit Übergabe des anzuzeigenden Graphen.
+	 * Konstruktor mit ï¿½bergabe des anzuzeigenden Graphen.
 	 * @param graph	anzuzeigender Graph
 	 */
 	public DrawPanel(IGraph graph) {
@@ -117,7 +117,7 @@ public class DrawPanel extends JPanel implements Runnable, MouseListener, MouseM
 	}
 	
 	/**
-	 * Aktiviert/deaktiviert die Anzeige der Kanten, die nicht zum kürzesten Pfad gehören.
+	 * Aktiviert/deaktiviert die Anzeige der Kanten, die nicht zum kï¿½rzesten Pfad gehï¿½ren.
 	 */
 	public void toggleEdgeDisplay() {
 		showAllEdges = !showAllEdges;
@@ -170,8 +170,8 @@ public class DrawPanel extends JPanel implements Runnable, MouseListener, MouseM
     }
 
     /**
-     * Setzt den kürzsten Pfad (durch den Arbeiterthread)
-     * @param path	kürzester Pfad
+     * Setzt den kï¿½rzsten Pfad (durch den Arbeiterthread)
+     * @param path	kï¿½rzester Pfad
      */
     synchronized void setPath(List<Integer> path) {
     	this.path = path;
@@ -179,7 +179,7 @@ public class DrawPanel extends JPanel implements Runnable, MouseListener, MouseM
     }
     
     /**
-     * Run-Methode, die die Anzeige aktualisiert, während der Graph sich ordnet.
+     * Run-Methode, die die Anzeige aktualisiert, wï¿½hrend der Graph sich ordnet.
      */
 	@Override
 	public void run() {		
