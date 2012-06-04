@@ -65,6 +65,9 @@ class Ant implements IAnt
     @Override
     public void decreaseLoad(int decreaseValue)
     {
+        if (this.load < decreaseValue)
+            throw new RuntimeException("Ant load too low!");
+            
         this.load -= decreaseValue;
     }
 
@@ -97,7 +100,7 @@ class Ant implements IAnt
     {
         return !this.isGoingOut;
     }
-    
+
     @Override
     public void setGoingHome()
     {

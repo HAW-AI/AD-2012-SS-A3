@@ -1,15 +1,13 @@
 package a3;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Ant Colony Optimization Algorithmus fuer das Traveling Salesman Problem.
  */
 public class CVRP
 {
+
     private static final boolean DEBUG = true;
     private final int antCount;
     private final int antCapacity;
@@ -17,7 +15,6 @@ public class CVRP
     private final double VAPORIZE_RATE = 0.5;
     private final int outputInterval;
     private Random rand = new Random(1337);
-    
     double[][] pheroMatrix = null;
 
     /**
@@ -68,7 +65,6 @@ public class CVRP
         int stepCount = 0;
         int tryCount = 0; // Falls nach maxTryCount keine neuer kuerzester Weg gefunden wurde terminiere
         int shortestPathLength = Integer.MAX_VALUE;
-        
 
         List<IAnt> ants = new ArrayList<IAnt>();
         ants.addAll(spawnAnts(this.antCount, start, graph.getCustomers()));
@@ -99,8 +95,8 @@ public class CVRP
                         // alle Kunden wurden bedient
                         if (ant.getRemainingCustomers().isEmpty())
                         {
-                            shortestPath = ant.getPath();
-                            shortestPathLength = graph.getPathLength(ant.getPath());
+                            shortestPath = new ArrayList(ant.getPath());
+                            shortestPathLength = graph.getPathLength(shortestPath);
 
                             markPath(tempPheroMatrix, ant.getPath(), 1.0 / shortestPathLength);
                             tryCount = 0;
@@ -126,8 +122,9 @@ public class CVRP
                         ant.addVisitedCustomer(ant.currentPosition());
                     }
 
-                    // der nächste gewählte Knoten ist zu groß
-                    if (ant.getRemainingCustomers().contains(nextVertex) && graph.getDemandOfCustomer(nextVertex) > ant.getLoad())
+                    // alle Kunden abgearbeitet oder der nächste gewählte Knoten ist zu groß
+                    if (ant.getRemainingCustomers().isEmpty()
+                            || (ant.getRemainingCustomers().contains(nextVertex) && graph.getDemandOfCustomer(nextVertex) > ant.getLoad()))
                     {
                         ant.setGoingHome();
                     }
@@ -147,6 +144,7 @@ public class CVRP
                 System.out.println(getPrintString(stepCount, shortestPathLength, this.splitPath(start, shortestPath)));
             }
         }
+
         return this.splitPath(start, shortestPath);
     }
 
@@ -156,40 +154,43 @@ public class CVRP
 
         List<Integer> bestVertices = new ArrayList(reachableVertices);
         bestVertices.retainAll(ant.getRemainingCustomers());
-        
+
         List<Integer> potentialVertices = new ArrayList(reachableVertices);
 
         if (ant.isGoingOut() && !bestVertices.isEmpty())
+        {
             potentialVertices = bestVertices;
+        }
 
-        
-        
-        double[] attractiveness = new double [potentialVertices.size()];
+
+        Map<Integer, Double> attractiveness = new HashMap<Integer, Double>();
         double totalAttractiveness = 0.0;
-        
+
         for (int vertex : potentialVertices)
         {
-            attractiveness[vertex] = calculateAttractiveness(graph, ant.currentPosition(), vertex);
-            totalAttractiveness += attractiveness[vertex];
+            attractiveness.put(vertex, calculateAttractiveness(graph, ant.currentPosition(), vertex));
+            totalAttractiveness += attractiveness.get(vertex);
         }
-        
-        int nextVertex = potentialVertices.get(0);
-        for (int i = 1; i < potentialVertices.size(); i++)
+
+        // Knoten mit maximaler Attraktivität finden
+        Map.Entry<Integer, Double> maxEntry = null;
+        for (Map.Entry<Integer, Double> entry : attractiveness.entrySet())
         {
-            if (potentialVertices.get(i) > nextVertex)
-            nextVertex = i;
+            if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0)
+            {
+                maxEntry = entry;
+            }
         }
-            
-            
-        return nextVertex;
+
+        return maxEntry.getKey();
     }
-    
+
     private double calculateAttractiveness(IGraph graph, int source, int target)
     {
         double influence = this.rand.nextFloat();
 
-        return Math.pow(graph.edgeWeight(source, target), influence )
-               * Math.pow(this.pheroMatrix[source][target], 1-influence);
+        return Math.pow(graph.edgeWeight(source, target), influence)
+                * Math.pow(this.pheroMatrix[source][target], 1 - influence);
     }
 
     /**
@@ -287,23 +288,36 @@ public class CVRP
     private List<List<Integer>> splitPath(int start, List<Integer> path)
     {
         List<List<Integer>> pathlist = new ArrayList<List<Integer>>();
-        path.remove(0);
+        path = new ArrayList(path);
 
-        List<Integer> templist = new ArrayList<Integer>();
-        templist.add(start);
-
-        for (int i : path)
+        if (!path.isEmpty())
         {
-            templist.add(i);
+            path.remove(0);
 
-            if (i == start)
+            List<Integer> templist = new ArrayList<Integer>();
+            templist.add(start);
+
+            for (int i : path)
             {
-                pathlist.add(templist);
-                templist = new ArrayList<Integer>();
-                templist.add(0);
+                templist.add(i);
+
+                if (i == start)
+                {
+                    pathlist.add(templist);
+                    templist = new ArrayList<Integer>();
+                    templist.add(0);
+                }
             }
+
         }
 
         return pathlist;
+
+    }
+
+    // DEBUG
+    private void debug(Object o)
+    {
+        System.out.println(o.toString());
     }
 }

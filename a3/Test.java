@@ -8,13 +8,12 @@ public class Test {
     private final static int ANTS = 2000;
     
     public static void main(String ... args) {
-       		
+
     	CVRP cvrp1 = new CVRP(ANTS, 1, STEPS);
     	CVRP cvrp3 = new CVRP(ANTS, 3, STEPS);
     	CVRP cvrp6 = new CVRP(ANTS, 6, STEPS);
 
-    	
-        System.out.println("Teste kleine vollstaendige Graphen");
+
     	int[] distanceMatrix1 = {0,1,1,1,0,1,1,1,0};
     	int[] eckenkapazitaet1 = {0,1,1};
     	//Kombination distancematrix1, eckenkapazitaet1:
@@ -26,6 +25,7 @@ public class Test {
     	for(List<Integer> list : path){
     		gesLaenge += graph.getPathLength(list);
     	}
+
     	System.out.println(gesLaenge + " " + path + " | Loesung: {{0 1 0},{0 2 0}}  L: 4");
     	path = cvrp3.shortestPath(graph, 0);
     	gesLaenge = 0;
@@ -33,8 +33,8 @@ public class Test {
     		gesLaenge += graph.getPathLength(list);
     	}
     	System.out.println(gesLaenge + " " + path + " | Loesung: {{0 1 2 0}}  L: 3");
-    	
-    	
+
+
     	int[] distanceMatrix2 = {0,1,3,5,0,3,3,2,0};
     	int[] eckenkapazitaet2 = {0,2,3};
     	//Kombination distancematrix2, eckenkapazitaet2:
