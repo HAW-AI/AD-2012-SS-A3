@@ -1,7 +1,7 @@
 package gui;
 
-import a3.IGraph;
 import a3.ACO;
+import a3.IGraph;
 
 /**
  * Arbeiterthread, der den ACO Algorithmus benutzt und den errechneten Pfad,

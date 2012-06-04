@@ -2,11 +2,9 @@ package gui;
 
 import a3.GraphFactory;
 import a3.IGraph;
-
+import a3.IOManager;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
-
-import a3.IOManager;
 
 /**
  * Klasse zum Starten der GUI. Derzeitig noch keine interaktive Auswahl von Graphen.
