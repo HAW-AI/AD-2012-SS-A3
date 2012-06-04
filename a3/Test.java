@@ -1,8 +1,5 @@
 package a3;
 
-import graph.BruteForce;
-import graph.GraphFactory;
-import graph.IGraph;
 import java.util.List;
 
 public class Test {
@@ -18,12 +15,12 @@ public class Test {
 
     	
         System.out.println("Teste kleine vollstaendige Graphen");
-    	int[][] distancematrix1 = {{0,1,1},{1,0,1},{1,1,0}};
+    	int[] distanceMatrix1 = {0,1,1,1,0,1,1,1,0};
     	int[] eckenkapazitaet1 = {0,1,1};
     	//Kombination distancematrix1, eckenkapazitaet1:
     	//Loesung bei einer Ameisenkapazitaet von >= 2: {{0 1 2 0}} || {{0 2 1 0}}  L: 3
     	//Loesung bei einer Ameisenkapazitaet von 1: {{0 1 0},{0 2 0}}  L: 4
-    	IGraph graph = GraphFactory.createDiGraph(distanceMatrix1, eckenkapazitaet1);
+    	IGraph graph = new GraphImpl(distanceMatrix1, eckenkapazitaet1);
     	List<List<Integer>> path = cvrp1.shortestPath(graph, 0);
     	int gesLaenge = 0;
     	for(List<Integer> list : path){
@@ -38,12 +35,12 @@ public class Test {
     	System.out.println(gesLaenge + " " + path + " | Loesung: {{0 1 2 0}}  L: 3");
     	
     	
-    	int[][] distancematrix2 = {{0,1,3},{5,0,3},{3,2,0}};
+    	int[] distanceMatrix2 = {0,1,3,5,0,3,3,2,0};
     	int[] eckenkapazitaet2 = {0,2,3};
     	//Kombination distancematrix2, eckenkapazitaet2:
     	//Loesung bei einer Ameisenkapazitaet von >= 5: {{0 1 2 0}}  L: 7
     	//Loesung bei einer Ameisenkapazitaet von 3: {{0 1 0},{0 2 0}}  L: 12
-    	graph = GraphFactory.createDiGraph(distanceMatrix2, eckenkapazitaet2);
+    	graph = new GraphImpl(distanceMatrix2, eckenkapazitaet2);
     	path = cvrp3.shortestPath(graph, 0);
     	gesLaenge = 0;
     	for(List<Integer> list : path){
@@ -54,12 +51,12 @@ public class Test {
     	
         
         System.out.println("Teste kleine unvollstaendige Graphen");
-    	int[][] distancematrix3 = {{0,-1,2},{5,0,7},{5,5,0}};
+    	int[] distanceMatrix3 = {0,-1,2,5,0,7,5,5,0};
     	int[] eckenkapazitaet3 = {0,2,3};
     	//Kombination distancematrix3, eckenkapazitaet3:
     	//Loesung bei einer Ameisenkapazitaet von >= 5: {{0 2 1 0}} L: 12
     	//Loesung bei einer Ameisenkapazitaet von 3 oder 4: {{0 2 0},{0 2 1 0}}  L: 19
-    	graph = GraphFactory.createDiGraph(distanceMatrix3, eckenkapazitaet3);
+    	graph = new GraphImpl(distanceMatrix3, eckenkapazitaet3);
     	path = cvrp3.shortestPath(graph, 0);
     	gesLaenge = 0;
     	for(List<Integer> list : path){
@@ -75,12 +72,12 @@ public class Test {
     	System.out.println(gesLaenge + " " + path + " | Loesung: {{0 2 1 0}} L: 12");
     	
     	
-    	int[][] distancematrix4 = {{0,1,-1},{2,0,3},{-1,4,0}};
+    	int[] distanceMatrix4 = {0,1,-1,2,0,3,-1,4,0};
     	int[] eckenkapazitaet4 = {0,3,5};
     	//Kombination distancematrix4, eckenkapazitaet4:
     	//Loesung bei einer Ameisenkapazitaet von >= 8: {{0 1 2 0}}  L: 10
     	//Loesung bei einer Ameisenkapazitaet von 5,6 oder 7 : {{0 1 0},{0 1 2 1 0}}  L: 13
-    	graph = GraphFactory.createDiGraph(distanceMatrix4, eckenkapazitaet4);
+    	graph = new GraphImpl(distanceMatrix4, eckenkapazitaet4);
     	path = cvrp6.shortestPath(graph, 0);
     	gesLaenge = 0;
     	for(List<Integer> list : path){
@@ -89,12 +86,12 @@ public class Test {
     	System.out.println(gesLaenge + " " + path + " | {{0 1 0},{0 1 2 1 0}}  L: 13");
     	
     	
-       	int[][] distancematrix5 = {{0,1,5},{5,0,2},{1,-1,0}};
+       	int[] distanceMatrix5 = {0,1,5,5,0,2,1,-1,0};
     	int[] eckenkapazitaet5 = {0,1,3};
     	//Kombination distancematrix5, eckenkapazitaet5:
     	//Loesung bei einer Ameisenkapazitaet von >= 4: {{0 1 2 0}}  L: 4 
     	//Loesung bei einer Ameisenkapazitaet von 3: {{0 1 2 0},{0 2 0}}  L: 10
-    	graph = GraphFactory.createDiGraph(distanceMatrix5, eckenkapazitaet5);
+    	graph = new GraphImpl(distanceMatrix5, eckenkapazitaet5);
     	path = cvrp3.shortestPath(graph, 0);
     	gesLaenge = 0;
     	for(List<Integer> list : path){
@@ -104,12 +101,12 @@ public class Test {
     	
     	
     	
-       	int[][] distancematrix6 = {{0,2,-1,1},{1,0,-1,-1},{7,1,0,7},{-1,-1,1,0}};
+       	int[] distanceMatrix6 = {0,2,-1,1,1,0,-1,-1,7,1,0,7,-1,-1,1,0};
     	int[] eckenkapazitaet6 = {0,3,1,1};
     	//Kombination distancematrix6, eckenkapazitaet6:
     	//Loesung bei einer Ameisenkapazitaet von >= 5: {{0 3 2 1 0}}  L: 4
     	//Loesung bei einer Ameisenkapazitaet von 3 : {{0 1 0},{0 3 2 1 0}}  L: 7 
-    	graph = GraphFactory.createDiGraph(distanceMatrix6, eckenkapazitaet6);
+    	graph = new GraphImpl(distanceMatrix6, eckenkapazitaet6);
     	path = cvrp3.shortestPath(graph, 0);
     	gesLaenge = 0;
     	for(List<Integer> list : path){
@@ -187,16 +184,16 @@ public class Test {
 //            path = algo.shortestPath(graph, 0);
 //            int w = graph.getPathLength(path);
 //            int diff = w-bestSolution;
-//            System.out.println("Wegl�nge: "+ w + "("+ (diff)+")");
+//            System.out.println("Weglï¿½nge: "+ w + "("+ (diff)+")");
 //            maxdiff = Math.max(maxdiff, diff);
 //            totaldiff += diff;
 //            if (diff > 0)
 //                ++fails;
 //        }
 //        System.out.println("-------------------------------------");
-//        System.out.println("Erfolgsquote:     " + String.format("%.2f",(RUNS-fails)*100.0/RUNS) + "%   (" + fails + " Fehler in " + RUNS + " Durchl�ufen)");
+//        System.out.println("Erfolgsquote:     " + String.format("%.2f",(RUNS-fails)*100.0/RUNS) + "%   (" + fails + " Fehler in " + RUNS + " Durchlï¿½ufen)");
 //        System.out.println("Gesamtdifferenz:  " + totaldiff);
-//        System.out.println("Gr��te Differenz: " + maxdiff);
+//        System.out.println("Grï¿½ï¿½te Differenz: " + maxdiff);
 //        System.out.println("Durchschntl.Diff: " + String.format("%.2f", (((double)totaldiff)/RUNS)));
 //        System.out.println("-------------------------------------");
     }
