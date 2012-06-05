@@ -34,6 +34,7 @@ class Ant implements IAnt
         this.load = capacity;
         this.customers = customers;
         this.visitedCustomers = new HashSet<Integer>();
+        currentPosition(); // TODO FAIL FAST
     }
 
     @Override
@@ -87,17 +88,21 @@ class Ant implements IAnt
     public void addPath(List<Integer> path)
     {
         this.path.addAll(path);
+        currentPosition(); // TODO FAIL FAST
     }
     
     @Override
     public void moveTo(int vertex)
     {
         path.add(vertex);
+        currentPosition(); // TODO FAIL FAST
     }
 
     @Override
     public int currentPosition()
     {
+    	// TODO FAIL FAST currentPosition sollte nie spontan 500 sein!
+    	if (path.get(path.size() - 1) > 50) throw new IllegalStateException("FAIL FAST currentPosition sollte nie spontan 500 sein!");
         return path.get(path.size() - 1);
     }
 
@@ -135,6 +140,7 @@ class Ant implements IAnt
         this.refill();
         this.visitedCustomers.clear();
         this.setGoingOut();
+        currentPosition(); // TODO FAIL FAST
     }
 
     @Override

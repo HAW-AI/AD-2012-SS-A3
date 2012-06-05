@@ -48,7 +48,7 @@ public class DrawPanel extends JPanel implements Runnable, MouseListener, MouseM
 	 */
 	public DrawPanel(IGraph graph, int capacity) {
 		this.graph = graph;
-		this.algo = new CVRP(graph, STEPS);
+		this.algo = new CVRP(graph, 0);
 		this.layout = new ISOMGraphLayout(graph, 50 * graph.getNumberOfVertices(), WIDTH, HEIGHT, 50);
 		
 		// Algorithmenthread

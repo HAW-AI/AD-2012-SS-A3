@@ -148,11 +148,15 @@ public class GraphImpl implements IGraph
         int size = getNumberOfVertices();
         for (int i = 0; i < size; i++)
         {
-            int check = distanceMatrix[(size * vertice + i)];
-            if (check != NON_EXISTING_EDGE && vertice != i)
-            {
-                reachable.add(i);
-            }
+        	try {
+        		int check = distanceMatrix[(size * vertice + i)];
+                if (check != NON_EXISTING_EDGE && vertice != i)
+                {
+                    reachable.add(i);
+                }
+        	} catch (ArrayIndexOutOfBoundsException e) {
+        		throw new ArrayIndexOutOfBoundsException(e.getMessage() + " while reading distanceMatrix(size = " + size + ", vertice = " + vertice + ", i = " + i + "), its size is " + size);
+        	}
         }
         return reachable;
     }
