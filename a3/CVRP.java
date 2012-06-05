@@ -11,7 +11,7 @@ public class CVRP
     private final double VAPORIZE_RATE = 0.5;
     private final Random rand = new Random(1337);
     private final IGraph graph;
-    private final Dijkstra dijkstra;
+    private final FloydWarshall pathfinder;
     private final int start;
     private final boolean outputInfo;
     private final int outputInterval;
@@ -37,7 +37,7 @@ public class CVRP
         this.start = start;
         this.outputInfo = outputInfo;
         this.outputInterval = outputInterval;
-        this.dijkstra = new Dijkstra(graph, start);
+        this.pathfinder = new FloydWarshall(graph);
     }
 
     /**
@@ -51,7 +51,7 @@ public class CVRP
      */
     public List<List<Integer>> shortestPath(int antCount, int antCapacity, int steps)
     {
-        return shortestPath(antCount, antCapacity, steps, Integer.MAX_VALUE);
+        return shortestPath(antCount, antCapacity, steps, 500);
     }
 
     /**
@@ -91,43 +91,49 @@ public class CVRP
 
                 // der aktuelle Weg ist länger als der kürzeste, daher uninteressant.
                 // man könnte auch längere graphen für die pheromatrix ausprobieren, muss man mal sehen.
-                if (shortestPathLength <= graph.getPathLength(ant.getPath()))
+                if (shortestPathLength < graph.getPathLength(ant.getPath()))
                 {
                     ant.reset();
                 }
 
-                int nextVertex = this.chooseNextVertex(ant);
 
                 if (ant.isAtCustomer())
                 {
                     ant.decreaseLoad(graph.getDemandOfCustomer(ant.currentPosition()));
                     ant.addVisitedCustomer(ant.currentPosition());
+                }
+                
+                
+                // alle Kunden sind beliefert
+                if (ant.getRemainingCustomers().isEmpty())
+                {
+                    List<Integer> pathHome = this.pathfinder.getShortestPath(ant.currentPosition(), this.start);
+                    pathHome.remove(0);
+                    ant.addPath(pathHome);
 
-                    // alle Kunden sind beliefert
-                    if (ant.getRemainingCustomers().isEmpty())
+                    if (graph.getPathLength(shortestPath) < shortestPathLength)
                     {
-                        ant.addPath(this.dijkstra.getShortestPathHome(ant.currentPosition()));
+                        shortestPath = new ArrayList(ant.getPath());
+                        shortestPathLength = graph.getPathLength(shortestPath);
 
-                        if (graph.getPathLength(shortestPath) < shortestPathLength)
-                        {
-                            shortestPath = new ArrayList(ant.getPath());
-                            shortestPathLength = graph.getPathLength(shortestPath);
-
-                            markPath(tempPheroMatrix, ant.getPath(), 1.0 / shortestPathLength);
-                            tryCount = 0;
-                            ant.reset();
-                            continue;
-                        }
+                        markPath(tempPheroMatrix, ant.getPath(), 1.0 / shortestPathLength);
+                        tryCount = 0;
                     }
 
-                    // der nächste Knoten (Kunde) hat mehr Bedarf als die Ameise bei sich trägt.
-                    if (ant.getRemainingCustomers().contains(nextVertex) && graph.getDemandOfCustomer(nextVertex) > ant.getLoad())
-                    {
-                        ant.addPath(this.dijkstra.getShortestPathHome(ant.currentPosition()));
-                        ant.refill();
-                        continue;
-                    }
+                    ant.reset();
+                    continue;
+                }
 
+                int nextVertex = this.chooseNextVertex(ant);
+                
+                // der nächste Knoten (Kunde) hat mehr Bedarf als die Ameise bei sich trägt.
+                if (ant.getRemainingCustomers().contains(nextVertex) && graph.getDemandOfCustomer(nextVertex) > ant.getLoad())
+                {
+                    List<Integer> pathHome = this.pathfinder.getShortestPath(ant.currentPosition(), this.start);
+                    pathHome.remove(0);
+                    ant.addPath(pathHome);
+                    ant.refill();
+                    continue;
                 }
 
                 ant.moveTo(nextVertex);
@@ -157,28 +163,35 @@ public class CVRP
         Map<Integer, Double> attractiveness = new HashMap<Integer, Double>();
         double totalAttractiveness = 0.0;
 
+        // individuelle und summierte Attraktivität berechnen
         for (int vertex : potentialVertices)
         {
             attractiveness.put(vertex, calculateAttractiveness(ant.currentPosition(), vertex));
             totalAttractiveness += attractiveness.get(vertex);
         }
 
-        // Knoten mit maximaler Attraktivität finden
-        Map.Entry<Integer, Double> maxEntry = null;
-        for (Map.Entry<Integer, Double> entry : attractiveness.entrySet())
+        // relative Attraktivität berechnen
+        for (int vertex : potentialVertices)
         {
-            if (maxEntry == null || entry.getValue() / totalAttractiveness > maxEntry.getValue() / totalAttractiveness)
-            {
-                maxEntry = entry;
-            }
+            attractiveness.put(vertex, attractiveness.get(vertex) / totalAttractiveness);
         }
 
-        return maxEntry.getKey();
+        double random = this.rand.nextFloat();
+        
+
+        return potentialVertices.get(rand.nextInt(potentialVertices.size()));
     }
 
+    /**
+     * Berechnet die Attraktivität einer Bewegung von einem zum anderen Knoten
+     *
+     * @param source Startknoten
+     * @param target Zielknoten
+     * @return Attraktivität
+     */
     private double calculateAttractiveness(int source, int target)
     {
-        return (1.0 / this.graph.edgeWeight(source, target) * this.pheroMatrix[source][target]);
+        return ((1.0 / this.graph.edgeWeight(source, target)) * this.pheroMatrix[source][target]);
     }
 
     /**
