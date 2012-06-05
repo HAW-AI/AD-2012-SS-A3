@@ -51,7 +51,7 @@ public class CVRP
      */
     public List<List<Integer>> shortestPath(int antCount, int antCapacity, int steps)
     {
-        return shortestPath(antCount, antCapacity, steps, 500);
+        return shortestPath(antCount, antCapacity, steps, 1000);
     }
 
     /**
@@ -78,7 +78,6 @@ public class CVRP
 
         List<IAnt> ants = new ArrayList<IAnt>();
         ants.addAll(spawnAnts(this.antCount, start, graph.getCustomers()));
-
 
 
         this.pheroMatrix = newPheroMatrix(graph.getNumberOfVertices(), 1);
@@ -159,21 +158,21 @@ public class CVRP
         Set<Integer> reachableVertices = this.graph.reachableAdjacencyVerticesOf(ant.currentPosition());
         List<Integer> potentialVertices = new ArrayList(reachableVertices);
 
-
-        Map<Integer, Double> attractiveness = new HashMap<Integer, Double>();
-        double totalAttractiveness = 0.0;
-
         // individuelle und summierte Attraktivität berechnen
+        Map<Integer, Double> indivigualAttractiveness = new HashMap<Integer, Double>();
+        double totalAttractiveness = 0.0;
+        
         for (int vertex : potentialVertices)
         {
-            attractiveness.put(vertex, calculateAttractiveness(ant.currentPosition(), vertex));
-            totalAttractiveness += attractiveness.get(vertex);
+            indivigualAttractiveness.put(vertex, calculateAttractiveness(ant.currentPosition(), vertex));
+            totalAttractiveness += indivigualAttractiveness.get(vertex);
         }
 
         // relative Attraktivität berechnen
+        Map<Integer, Double> relativeAttractiveness = new HashMap<Integer, Double>();
         for (int vertex : potentialVertices)
         {
-            attractiveness.put(vertex, attractiveness.get(vertex) / totalAttractiveness);
+            relativeAttractiveness.put(vertex, indivigualAttractiveness.get(vertex) / totalAttractiveness);
         }
 
         double random = this.rand.nextFloat();
