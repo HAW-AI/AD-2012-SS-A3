@@ -13,6 +13,7 @@ public class GraphImpl implements IGraph
 
     private final int[] distanceMatrix;
     private final int[] demand;
+    private final int numberOfVertices;
     
     /**
      * Konstruktor eines Graphen mit Uebergabe der Distanzmatrix und der
@@ -27,6 +28,7 @@ public class GraphImpl implements IGraph
     {
         this.distanceMatrix = distanceMatrix;
         this.demand = demandMatrix;
+        this.numberOfVertices = (int)Math.sqrt(distanceMatrix.length);
     }
 
     @Override
@@ -107,10 +109,11 @@ public class GraphImpl implements IGraph
         return true;
     }
 
+    
     @Override
     public int getNumberOfVertices()
     {
-        return (int)Math.sqrt(distanceMatrix.length);
+    	return numberOfVertices;
     }
     
     @Override

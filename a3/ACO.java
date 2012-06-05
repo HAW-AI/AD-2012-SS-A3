@@ -1,7 +1,8 @@
 package a3;
 
-import graph.IGraph;
 import java.util.*;
+
+import a3.IGraph;
 
 /**
  * Ant Colony Optimization Algorithmus fuer das Traveling Salesman Problem.

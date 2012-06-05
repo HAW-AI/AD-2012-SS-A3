@@ -1,10 +1,12 @@
 package gui;
 
-import a3.IGraph;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
+
+import a3.IGraph;
 
 /**
  * ISOM Graph Layouter zur Darstellung von Graphen.

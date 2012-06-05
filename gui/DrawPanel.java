@@ -1,7 +1,6 @@
 package gui;
 
-import a3.ACO;
-import a3.IGraph;
+
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -11,6 +10,9 @@ import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
+
+import a3.ACO;
+import a3.IGraph;
 
 /**
  * Panel zur Anzeige des Graphen und dem errechneten k�rzesten Pfades.

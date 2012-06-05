@@ -1,11 +1,13 @@
 package gui;
-import a3.IGraph;
+
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.LayoutStyle;
+
+import a3.IGraph;
 
 /**
  * Hauptfenster der GUI, welches das DrawPanel initialisiert und eine Checkbox 

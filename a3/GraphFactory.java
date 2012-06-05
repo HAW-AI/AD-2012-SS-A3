@@ -35,7 +35,7 @@ public abstract class GraphFactory {
                 }
             }
         }
-        return new GraphImpl(dMatrix);
+        return new GraphImpl(dMatrix, null);
     }
     
     /**
@@ -64,7 +64,7 @@ public abstract class GraphFactory {
                 }
              }
         }
-        return new GraphImpl(dMatrix);
+        return new GraphImpl(dMatrix, null);
     }
 
     /**
@@ -94,7 +94,7 @@ public abstract class GraphFactory {
             }
         }
 
-        return new GraphImpl(distanceMatrix);
+        return new GraphImpl(distanceMatrix, null);
     }
 
     /**
@@ -119,6 +119,6 @@ public abstract class GraphFactory {
             }
         }
 
-        return new GraphImpl(distanceMatrix);
+        return new GraphImpl(distanceMatrix, null);
     }
 }
