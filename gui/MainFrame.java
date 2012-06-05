@@ -24,31 +24,33 @@ public class MainFrame extends javax.swing.JFrame {
 	 * Konstruktor ohne Fensternamen.
 	 * @param graph 	der anzuzeigende Graph
 	 */
-	public MainFrame(IGraph graph) {
+	public MainFrame(IGraph graph, int capacity) {
 		super();
-		initGUI(graph);
+		initGUI(graph, capacity);
 	}
 	
 	/**
 	 * Konstruktor mit Fensternamen.
 	 * @param graph 	der anzuzeigende Graph
 	 * @param name		Name des Fensters
+	 * @param capacity 
 	 */
-	public MainFrame(IGraph graph, String name) {
+	public MainFrame(IGraph graph, String name, int capacity) {
 		super(name);
-		initGUI(graph);
+		initGUI(graph, capacity);
 	}
 	
 	/**
 	 * Initialisiert die grafischen Elemente.
 	 * @param graph		der anzuzeigende Graph
+	 * @param capacity 
 	 */
-	private void initGUI(IGraph graph) {
+	private void initGUI(IGraph graph, int capacity) {
 		try {
 			GroupLayout thisLayout = new GroupLayout((JComponent)getContentPane());
 			getContentPane().setLayout(thisLayout);
 			{
-				jDrawPanel = new DrawPanel(graph);
+				jDrawPanel = new DrawPanel(graph, capacity);
 			}
 			{
 				jCheckBox = new JCheckBox();

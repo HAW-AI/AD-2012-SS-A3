@@ -15,7 +15,7 @@ public class GUIStarter {
 	public static void main(String[] args) {
 					// GraphFactory.createGraph(new IOManager("src/simGraph(10).txt").readGraphMatrixFromSimFile());
 		IGraph graph = GraphFactory.createDiGraph(IOManager.RandomDistanceMatrix(1338, 200, 50, 0.5));
-		JFrame frame = new MainFrame(graph, "Graph Viewer");
+		JFrame frame = new MainFrame(graph, "Graph Viewer", 5555);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);

@@ -44,14 +44,15 @@ public class DrawPanel extends JPanel implements Runnable, MouseListener, MouseM
 	/**
 	 * Konstruktor mit �bergabe des anzuzeigenden Graphen.
 	 * @param graph	anzuzeigender Graph
+	 * @param capacity 
 	 */
-	public DrawPanel(IGraph graph) {
+	public DrawPanel(IGraph graph, int capacity) {
 		this.graph = graph;
 		this.algo = new CVRP(graph, STEPS);
 		this.layout = new ISOMGraphLayout(graph, 50 * graph.getNumberOfVertices(), WIDTH, HEIGHT, 50);
 		
 		// Algorithmenthread
-		new Thread(new WorkerThread(this, algo, graph)).start();
+		new Thread(new WorkerThread(this, algo, graph, capacity)).start();
 		// Zeichenthread
 		thread = new Thread(this);
 		thread.start();
@@ -172,11 +173,12 @@ public class DrawPanel extends JPanel implements Runnable, MouseListener, MouseM
 
     /**
      * Setzt den k�rzsten Pfad (durch den Arbeiterthread)
-     * @param path	k�rzester Pfad
+     * @param list	k�rzester Pfad
      */
-    synchronized void setPath(List<Integer> path) {
-    	this.path = path;
-    	System.out.println("Errechneter Pfad: "+path+" Len: "+graph.getPathLength(path));
+    synchronized void setPath(List<List<Integer>> list) {
+    	// TODO SETPATH
+    	//this.path = list;
+    	//System.out.println("Errechneter Pfad: "+list+" Len: "+graph.getPathLength(list));
     }
     
     /**

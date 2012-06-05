@@ -11,17 +11,20 @@ public class WorkerThread extends Thread {
 	private final DrawPanel panel;
 	private final CVRP algo;
 	private final IGraph graph;
+	private final int capacity;
 	
 	/**
 	 * Konstruktor der Arbeiterthreads.
 	 * @param panel 	Drawpanel, dem der errechnete Pfads �bergeben werden soll
 	 * @param algo		ACO Algorithmus
 	 * @param graph		Graph auf dem der Pfad gesucht werden soll
+	 * @param capacity 
 	 */
-	public WorkerThread(DrawPanel panel, CVRP algo, IGraph graph) {
+	public WorkerThread(DrawPanel panel, CVRP algo, IGraph graph, int capacity) {
 		this.panel = panel;
 		this.algo = algo;
 		this.graph = graph;
+		this.capacity = capacity;
 	}
 	
 	/**
@@ -29,6 +32,6 @@ public class WorkerThread extends Thread {
 	 */
 	@Override
 	public void run() {
-		panel.setPath(algo.shortestPath(graph, 0));
+		panel.setPath(algo.shortestPath(1, capacity, 500));
 	}
 }
