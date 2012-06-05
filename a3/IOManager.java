@@ -58,6 +58,7 @@ public class IOManager {
             }
             br.close();
         } catch (IOException e) {
+        	e.printStackTrace();
         }
         return edgeDistance;
     }
@@ -83,6 +84,7 @@ public class IOManager {
             }
             br.close();
         } catch (IOException e) {
+        	e.printStackTrace();
         }
         return edgeCapacity;
     }
@@ -106,6 +108,7 @@ public class IOManager {
             br.close();
         } catch (IOException e) {
             System.out.println("ups");
+        	e.printStackTrace();
         }
         return dimension;
     }
@@ -127,6 +130,7 @@ public class IOManager {
             }
             br.close();
         } catch (IOException e) {
+        	e.printStackTrace();
         }
         return ant;
     }
@@ -190,10 +194,12 @@ public class IOManager {
 
             } catch (IOException e) {
                 System.out.println("IOException: " + e.getMessage());
+            	e.printStackTrace();
                 return failMatrix;
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");
+        	e.printStackTrace();
             return failMatrix;
         }
     }
@@ -213,11 +219,13 @@ public class IOManager {
                 }
             } catch (IOException e) {
                 System.out.println("IOExecption!");
+            	e.printStackTrace();
                 return 0;
             }
 
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");
+        	e.printStackTrace();
             return 0;
         }
         return 0;
@@ -247,6 +255,7 @@ public class IOManager {
             writer.close();
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
+        	e.printStackTrace();
         }
     }
 
@@ -361,10 +370,12 @@ public class IOManager {
                 return matrix;
             } catch (IOException e) {
                 System.out.println("IOException: " + e.getMessage());
+            	e.printStackTrace();
                 return failMatrix;
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");
+        	e.printStackTrace();
             return failMatrix;
         }
     }
@@ -433,10 +444,12 @@ public class IOManager {
                 return matrix;
             } catch (IOException e) {
                 System.out.println("IOException: " + e.getMessage());
+            	e.printStackTrace();
                 return failMatrix;
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");
+        	e.printStackTrace();
             return failMatrix;
         }
     }
@@ -457,13 +470,16 @@ public class IOManager {
                             ("DIMENSION:").length()).trim());
                 } catch (NumberFormatException e) {
                     System.out.println("NumberFormatException!");
+                	e.printStackTrace();
                 }
                 input.close();
             } catch (IOException e) {
                 System.out.println("IOExecption!");
+            	e.printStackTrace();
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found!");
+        	e.printStackTrace();
         }
         return dimension;
     }

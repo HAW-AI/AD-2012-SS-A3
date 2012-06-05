@@ -38,6 +38,20 @@ public class Test {
     	System.out.println(gesLaenge + " " + path + " | Loesung: {{0 1 2 0}}  L: 3");
 
         
+        IOManager iOManager = new IOManager("src/a3/file21.txt");
+        try {
+			IGraph graphT = new GraphImpl(iOManager.getEdgeWeightSection(), iOManager.getDemandSection());
+			test1 = new CVRP(graphT, 0);
+	        System.out.println("Graph T, Kapazität " + iOManager.getAntCapacity());
+			path = test1.shortestPath(ANTS, iOManager.getAntCapacity(), STEPS);
+	    	gesLaenge = 0;
+	    	for(List<Integer> list : path){
+	    		gesLaenge += graph1.getPathLength(list);
+	    	}
+	    	System.out.println(gesLaenge + " " + path);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
         
         
         
