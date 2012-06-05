@@ -1,4 +1,4 @@
-package adp33;
+package a3;
 
 import java.io.*;
 import java.lang.Exception;
@@ -52,7 +52,7 @@ public class IOManager {
                         for (int i = 0; i < splited.length; i++) {
                             edgeDistance[index] = Integer.parseInt(splited[i].trim());
                             index++;
-                            testAry[i][j] = Integer.parseInt(splited[i].trim());
+                            testAry[j][i] = Integer.parseInt(splited[i].trim());
                         }
                         j++;
                     }
@@ -74,7 +74,7 @@ public class IOManager {
             }
             if (counter == testAry.length - 1) {
                 fehlerausgabe("Eine Sackgasse oder nichtzusammenhaendender Graph.");
-                return failMatrix;
+                System.exit(0);
             }
             counter = 0;
         }
@@ -109,7 +109,7 @@ public class IOManager {
         for (int customer : edgeCapacity) {
             if (customer > capacity) {
                 fehlerausgabe("Die Kapazitaet des LKWs ist kleiner als die groesste Kapazitaet der Kunden.");
-                return failMatrix;
+                System.exit(0);
             }
         }
         return edgeCapacity;
@@ -158,6 +158,6 @@ public class IOManager {
     }
 
     private void fehlerausgabe(String text) {
-        System.out.println("Fehler beim Einlesen der Datei: " + text);
+        System.out.println("Fehler beim Einlesen der Datei aus : " + filePath + "   " + text);
     }
 }
