@@ -79,7 +79,6 @@ public class CVRP
         List<IAnt> ants = new ArrayList<IAnt>();
         ants.addAll(spawnAnts(this.antCount, start, graph.getCustomers()));
 
-
         this.pheroMatrix = newPheroMatrix(graph.getNumberOfVertices(), 1);
         double[][] tempPheroMatrix = newPheroMatrix(pheroMatrix.length, 0);
 
@@ -105,6 +104,7 @@ public class CVRP
                 if (ant.getRemainingCustomers().isEmpty())
                 {
                     List<Integer> pathHome = this.pathfinder.getShortestPath(ant.currentPosition(), this.start);
+                    
                     pathHome.remove(0);
                     ant.addPath(pathHome);
 
@@ -153,7 +153,7 @@ public class CVRP
 
     private int chooseNextVertex(IAnt ant)
     {
-        List<Integer> reachableVertices = new ArrayList(this.graph.reachableAdjacencyVerticesOf(ant.currentPosition()));
+        List<Integer> reachableVertices = new ArrayList(this.graph.getNeighboursOf(ant.currentPosition()));
 
         // individuelle und summierte Attraktivität berechnen
         Map<Integer, Double> indivigualAttractiveness = new HashMap<Integer, Double>();
@@ -308,19 +308,12 @@ public class CVRP
                 {
                     pathlist.add(templist);
                     templist = new ArrayList<Integer>();
-                    templist.add(0);
+                    templist.add(start);
                 }
             }
         }
 
-        debug(path);
-        
         return pathlist;
     }
 
-    // DEBUG
-    private void debug(Object o)
-    {
-        System.out.println(o.toString());
-    }
 }

@@ -68,5 +68,5 @@ public interface IGraph
      *
      * @return Menge aus Indezes der erreichbaren Ecken
      */
-    Set<Integer> reachableAdjacencyVerticesOf(int vertice);
+    Set<Integer> getNeighboursOf(int vertice);
 }

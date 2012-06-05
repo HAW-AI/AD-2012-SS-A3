@@ -35,14 +35,6 @@ public interface IAnt
      */
     void refill();
 
-    public boolean isGoingHome();
-    
-    public void setGoingHome();
-
-    public boolean isGoingOut();
-
-    public void setGoingOut();
-
     /**
      * Fügt der Ameise einen neuen besuchten Knunden hinzu.
      *

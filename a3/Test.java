@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Test {
 	
-    private final static int STEPS = 500;
+    private final static int STEPS = 5000;
     private final static int ANTS = 5000;
     
     public static void main(String ... args) {

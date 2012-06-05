@@ -10,30 +10,32 @@ import java.util.Set;
  */
 public class GraphImpl implements IGraph
 {
-
     private final int[] distanceMatrix;
     private final int[] demand;
     private final int numberOfVertices;
     
     /**
      * Konstruktor eines Graphen mit Uebergabe der Distanzmatrix und der
-     * Eckenkapazit�ten @precondition Die Anzahl der Elemente der Matrix muss
+     * Eckenkapazitäten @precondition Die Anzahl der Elemente der Matrix muss
      * quadratisch sein. @precondition Die Anzahl der Elemente der Kapazit�ten
      * muss der Eckenanzahl entsprechen.
      *
      * @param distanceMatrix
      * @param capacities
      */
-    public GraphImpl(int[] distanceMatrix, int[] demandMatrix)
+    public GraphImpl(int[] distanceMatrix, int[] demandList)
     {
         this.distanceMatrix = distanceMatrix;
-        this.demand = demandMatrix;
+        this.demand = demandList;
         this.numberOfVertices = (int)Math.sqrt(distanceMatrix.length);
     }
 
     @Override
     public int getDemandOfCustomer(int vertex)
     {
+        if (vertex < 0 || vertex >= this.demand.length)
+            return 0;
+
         return this.demand[vertex];
     }
 
@@ -76,8 +78,8 @@ public class GraphImpl implements IGraph
                 }
             }
         }
-        return s;
 
+        return s;
     }
 
     @Override
@@ -142,7 +144,7 @@ public class GraphImpl implements IGraph
     }
 
     @Override
-    public Set<Integer> reachableAdjacencyVerticesOf(int vertice)
+    public Set<Integer> getNeighboursOf(int vertice)
     {
         Set<Integer> reachable = new HashSet<Integer>();
         int size = getNumberOfVertices();
@@ -165,10 +167,6 @@ public class GraphImpl implements IGraph
     public int getPathLength(List<Integer> path)
     {
         int wayLength = 0;
-        if (path.size() > 0 && path.get(0) >= getNumberOfVertices())
-        {
-            return 0;
-        }
         for (int i = 0; i < path.size() - 1; ++i)
         {
             int check = path.get(i + 1);
