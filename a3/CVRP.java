@@ -126,9 +126,12 @@ public class CVRP
                 // der nächste Knoten (Kunde) hat mehr Bedarf als die Ameise bei sich trägt.
                 if (ant.getRemainingCustomers().contains(nextVertex) && graph.getDemandOfCustomer(nextVertex) > ant.getLoad())
                 {
-                    List<Integer> pathHome = this.pathfinder.getShortestPath(ant.currentPosition(), this.start);
-                    pathHome.remove(0);
-                    ant.addPath(pathHome);
+                    if (ant.currentPosition() != this.start)
+                    {
+                        List<Integer> pathHome = this.pathfinder.getShortestPath(ant.currentPosition(), this.start);
+                        pathHome.remove(0);
+                        ant.addPath(pathHome);
+                    }
                     ant.refill();
                     continue;
                 }
@@ -315,5 +318,4 @@ public class CVRP
 
         return pathlist;
     }
-
 }
