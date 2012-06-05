@@ -46,7 +46,7 @@ public class Test {
 			path = test1.shortestPath(ANTS, iOManager.getAntCapacity(), STEPS);
 	    	gesLaenge = 0;
 	    	for(List<Integer> list : path){
-	    		gesLaenge += graph1.getPathLength(list);
+	    		gesLaenge += graphT.getPathLength(list);
 	    	}
 	    	System.out.println(gesLaenge + " " + path);
 		} catch (Exception e) {

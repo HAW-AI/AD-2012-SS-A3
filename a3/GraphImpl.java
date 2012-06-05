@@ -24,7 +24,7 @@ public class GraphImpl implements IGraph
      * @param distanceMatrix
      * @param capacities
      */
-    GraphImpl(int[] distanceMatrix, int[] demandMatrix)
+    public GraphImpl(int[] distanceMatrix, int[] demandMatrix)
     {
         this.distanceMatrix = distanceMatrix;
         this.demand = demandMatrix;
