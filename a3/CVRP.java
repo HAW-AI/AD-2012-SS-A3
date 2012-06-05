@@ -8,7 +8,7 @@ import java.util.*;
 public class CVRP
 {
 
-    private final double VAPORIZE_RATE = 0.5;
+    private final double VAPORIZE_RATE = 0.4;
     private final Random rand = new Random(1337);
     private final IGraph graph;
     private final FloydWarshall pathfinder;
@@ -51,7 +51,7 @@ public class CVRP
      */
     public List<List<Integer>> shortestPath(int antCount, int antCapacity, int steps)
     {
-        return shortestPath(antCount, antCapacity, steps, 1000);
+        return shortestPath(antCount, antCapacity, steps, 10000);
     }
 
     /**
@@ -76,8 +76,7 @@ public class CVRP
         int tryCount = 0; // Falls nach maxTryCount keine neuer kuerzester Weg gefunden wurde terminiere
         int shortestPathLength = Integer.MAX_VALUE;
 
-        List<IAnt> ants = new ArrayList<IAnt>();
-        ants.addAll(spawnAnts(this.antCount, start, graph.getCustomers()));
+        List<IAnt> ants = spawnAnts(this.antCount, start, graph.getCustomers());
 
         this.pheroMatrix = newPheroMatrix(graph.getNumberOfVertices(), 1);
         double[][] tempPheroMatrix = newPheroMatrix(pheroMatrix.length, 0);
@@ -104,17 +103,20 @@ public class CVRP
                 if (ant.getRemainingCustomers().isEmpty())
                 {
                     List<Integer> pathHome = this.pathfinder.getShortestPath(ant.currentPosition(), this.start);
-                    
+
                     pathHome.remove(0);
                     ant.addPath(pathHome);
 
-                    if (graph.getPathLength(ant.getPath()) <= shortestPathLength)
+                    int newPathLength = graph.getPathLength(ant.getPath());
+                    if (newPathLength <= shortestPathLength)
                     {
+                        if (newPathLength < shortestPathLength)
+                            tryCount = 0;
+
                         shortestPath = new ArrayList(ant.getPath());
                         shortestPathLength = graph.getPathLength(shortestPath);
 
                         markPath(tempPheroMatrix, ant.getPath(), 1.0 / shortestPathLength);
-                        tryCount = 0;
                     }
 
                     ant.reset();
