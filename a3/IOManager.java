@@ -43,18 +43,16 @@ public class IOManager {
             while (!(line = br.readLine()).equals("EOF")) {
                 if (line.equals("EDGE_WEIGHT_SECTION")) {
                     edgeDistance = new int[getDimension() * getDimension()];
+                    testAry = new int[getDimension()][getDimension()];
                     int index = 0;
-                    int i = 0;
                     int j = 0;
                     while (!(line = br.readLine()).equals("DEMAND_SECTION") && !line.equals("EOF")) {
                         String unspaced = line.trim();
                         String[] splited = unspaced.split("(\\s)+");
-                        i = 0;
-                        for (String string : splited) {
-                            edgeDistance[index] = Integer.parseInt(string.trim());
+                        for (int i = 0; i < splited.length; i++) {
+                            edgeDistance[index] = Integer.parseInt(splited[i].trim());
                             index++;
-                            testAry[i][j] = Integer.parseInt(string.trim());
-                            i++;
+                            testAry[i][j] = Integer.parseInt(splited[i].trim());
                         }
                         j++;
                     }
@@ -80,10 +78,6 @@ public class IOManager {
             }
             counter = 0;
         }
-        
-        
-        
-        
         return edgeDistance;
     }
 
@@ -132,7 +126,6 @@ public class IOManager {
 
                 if (splited[0].equals("DIMENSION")) {
                     dimension = Integer.parseInt(splited[1].trim());
-
                 }
             }
             br.close();
