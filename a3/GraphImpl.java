@@ -125,6 +125,18 @@ public class GraphImpl implements IGraph
 
         return customers;
     }
+    
+    @Override
+    public Set<Integer> getVertices()
+    {
+        Set vertices = new HashSet<Integer>();
+        for (int i = 0; i < getNumberOfVertices(); i++)
+        {
+            vertices.add(i);
+        }
+
+        return vertices;
+    }
 
     @Override
     public Set<Integer> reachableAdjacencyVerticesOf(int vertice)

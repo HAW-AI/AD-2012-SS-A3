@@ -84,6 +84,12 @@ class Ant implements IAnt
     }
 
     @Override
+    public void addPath(List<Integer> path)
+    {
+        this.path.addAll(path);
+    }
+    
+    @Override
     public void moveTo(int vertex)
     {
         path.add(vertex);

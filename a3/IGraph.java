@@ -41,11 +41,18 @@ public interface IGraph
     int getNumberOfVertices();
 
     /**
-     * Gibt die Liste der Knoten zurück
+     * Gibt die Liste der Knoten mit Bedarf zurück
      *
      * @return liste der Knoten
      */
     Set<Integer> getCustomers();
+
+    /**
+     * Gibt die Liste aller Knoten zurück
+     *
+     * @return liste der Knoten
+     */
+    Set<Integer> getVertices();
 
     /**
      * Berechnet die Summe der Distanzen des gegebenen Weges.

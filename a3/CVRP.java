@@ -8,13 +8,16 @@ import java.util.*;
 public class CVRP
 {
 
-    private static final boolean DEBUG = true;
-    private final int antCount;
-    private final int antCapacity;
-    private final int steps;
     private final double VAPORIZE_RATE = 0.5;
+    private final Random rand = new Random(1337);
+    private final IGraph graph;
+    private final Dijkstra dijkstra;
+    private final int start;
+    private final boolean outputInfo;
     private final int outputInterval;
-    private Random rand = new Random(1337);
+    private int antCount;
+    private int antCapacity;
+    private int steps;
     double[][] pheroMatrix = null;
 
     /**
@@ -23,17 +26,18 @@ public class CVRP
      * @param antCount Anzahl der maximal verwendeten Ameisen
      * @param steps	Anzahl der maximalen Schritte
      */
-    CVRP(int antCount, int antCapacity, int steps)
+    CVRP(IGraph graph, int start)
     {
-        this(antCount, antCapacity, steps, 100);
+        this(graph, start, true, 100);
     }
 
-    CVRP(int antCount, int antCapacity, int steps, int outputInterval)
+    CVRP(IGraph graph, int start, boolean outputInfo, int outputInterval)
     {
-        this.antCount = antCount;
-        this.antCapacity = antCapacity;
-        this.steps = steps;
+        this.graph = graph;
+        this.start = start;
+        this.outputInfo = outputInfo;
         this.outputInterval = outputInterval;
+        this.dijkstra = new Dijkstra(graph, start);
     }
 
     /**
@@ -45,9 +49,9 @@ public class CVRP
      * @return Liste mit dem Weg von der Ecke ueber alle Anderen bis zu dieser
      * zurueck.
      */
-    public List<List<Integer>> shortestPath(IGraph graph, int start)
+    public List<List<Integer>> shortestPath(int antCount, int antCapacity, int steps)
     {
-        return shortestPath(graph, start, Integer.MAX_VALUE);
+        return shortestPath(antCount, antCapacity, steps, Integer.MAX_VALUE);
     }
 
     /**
@@ -60,8 +64,14 @@ public class CVRP
      * @return Liste mit dem Weg von der Ecke ueber alle Anderen bis zu dieser
      * zurueck
      */
-    public List<List<Integer>> shortestPath(IGraph graph, int start, int maxTryCount)
+    public List<List<Integer>> shortestPath(int antCount, int antCapacity, int steps, int maxTryCount)
     {
+        this.antCount = antCount;
+        this.antCapacity = antCapacity;
+        this.steps = steps;
+
+        List<Integer> shortestPath = new ArrayList<Integer>();
+
         int stepCount = 0;
         int tryCount = 0; // Falls nach maxTryCount keine neuer kuerzester Weg gefunden wurde terminiere
         int shortestPathLength = Integer.MAX_VALUE;
@@ -69,7 +79,7 @@ public class CVRP
         List<IAnt> ants = new ArrayList<IAnt>();
         ants.addAll(spawnAnts(this.antCount, start, graph.getCustomers()));
 
-        List<Integer> shortestPath = new ArrayList<Integer>();
+
 
         this.pheroMatrix = newPheroMatrix(graph.getNumberOfVertices(), 1);
         double[][] tempPheroMatrix = newPheroMatrix(pheroMatrix.length, 0);
@@ -78,6 +88,7 @@ public class CVRP
         {
             for (IAnt ant : ants)
             {
+
                 // der aktuelle Weg ist länger als der kürzeste, daher uninteressant.
                 // man könnte auch längere graphen für die pheromatrix ausprobieren, muss man mal sehen.
                 if (shortestPathLength <= graph.getPathLength(ant.getPath()))
@@ -85,15 +96,19 @@ public class CVRP
                     ant.reset();
                 }
 
-                Set<Integer> reachable = graph.reachableAdjacencyVerticesOf(ant.currentPosition());
-                int nextVertex = this.chooseNextVertex(graph, ant);
+                int nextVertex = this.chooseNextVertex(ant);
 
-                if (ant.isGoingHome())
+                if (ant.isAtCustomer())
                 {
-                    if (ant.currentPosition() == start)
+                    ant.decreaseLoad(graph.getDemandOfCustomer(ant.currentPosition()));
+                    ant.addVisitedCustomer(ant.currentPosition());
+
+                    // alle Kunden sind beliefert
+                    if (ant.getRemainingCustomers().isEmpty())
                     {
-                        // alle Kunden wurden bedient
-                        if (ant.getRemainingCustomers().isEmpty())
+                        ant.addPath(this.dijkstra.getShortestPathHome(ant.currentPosition()));
+
+                        if (graph.getPathLength(shortestPath) < shortestPathLength)
                         {
                             shortestPath = new ArrayList(ant.getPath());
                             shortestPathLength = graph.getPathLength(shortestPath);
@@ -101,33 +116,18 @@ public class CVRP
                             markPath(tempPheroMatrix, ant.getPath(), 1.0 / shortestPathLength);
                             tryCount = 0;
                             ant.reset();
-                        } else
-                        {
-                            ant.refill();
-                            ant.setGoingOut();
+                            continue;
                         }
                     }
 
-                    // minioptimierung
-                    if (reachable.contains(start))
+                    // der nächste Knoten (Kunde) hat mehr Bedarf als die Ameise bei sich trägt.
+                    if (ant.getRemainingCustomers().contains(nextVertex) && graph.getDemandOfCustomer(nextVertex) > ant.getLoad())
                     {
-                        ant.moveTo(start);
+                        ant.addPath(this.dijkstra.getShortestPathHome(ant.currentPosition()));
+                        ant.refill();
                         continue;
                     }
-                } else
-                {
-                    if (ant.isAtCustomer())
-                    {
-                        ant.decreaseLoad(graph.getDemandOfCustomer(ant.currentPosition()));
-                        ant.addVisitedCustomer(ant.currentPosition());
-                    }
 
-                    // alle Kunden abgearbeitet oder der nächste gewählte Knoten ist zu groß
-                    if (ant.getRemainingCustomers().isEmpty()
-                            || (ant.getRemainingCustomers().contains(nextVertex) && graph.getDemandOfCustomer(nextVertex) > ant.getLoad()))
-                    {
-                        ant.setGoingHome();
-                    }
                 }
 
                 ant.moveTo(nextVertex);
@@ -139,28 +139,19 @@ public class CVRP
             ++tryCount;
 
             //Debug Information
-            if (DEBUG && stepCount % outputInterval == 0)
+            if (outputInfo && stepCount % outputInterval == 0)
             {
-                System.out.println(getPrintString(stepCount, shortestPathLength, this.splitPath(start, shortestPath)));
+                printInfo(stepCount, shortestPathLength, this.splitPath(start, shortestPath));
             }
         }
 
         return this.splitPath(start, shortestPath);
     }
 
-    private int chooseNextVertex(IGraph graph, IAnt ant)
+    private int chooseNextVertex(IAnt ant)
     {
-        Set<Integer> reachableVertices = graph.reachableAdjacencyVerticesOf(ant.currentPosition());
-
-        List<Integer> bestVertices = new ArrayList(reachableVertices);
-        bestVertices.retainAll(ant.getRemainingCustomers());
-
+        Set<Integer> reachableVertices = this.graph.reachableAdjacencyVerticesOf(ant.currentPosition());
         List<Integer> potentialVertices = new ArrayList(reachableVertices);
-
-        if (ant.isGoingOut() && !bestVertices.isEmpty())
-        {
-            potentialVertices = bestVertices;
-        }
 
 
         Map<Integer, Double> attractiveness = new HashMap<Integer, Double>();
@@ -168,7 +159,7 @@ public class CVRP
 
         for (int vertex : potentialVertices)
         {
-            attractiveness.put(vertex, calculateAttractiveness(graph, ant.currentPosition(), vertex));
+            attractiveness.put(vertex, calculateAttractiveness(ant.currentPosition(), vertex));
             totalAttractiveness += attractiveness.get(vertex);
         }
 
@@ -176,7 +167,7 @@ public class CVRP
         Map.Entry<Integer, Double> maxEntry = null;
         for (Map.Entry<Integer, Double> entry : attractiveness.entrySet())
         {
-            if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0)
+            if (maxEntry == null || entry.getValue() / totalAttractiveness > maxEntry.getValue() / totalAttractiveness)
             {
                 maxEntry = entry;
             }
@@ -185,12 +176,9 @@ public class CVRP
         return maxEntry.getKey();
     }
 
-    private double calculateAttractiveness(IGraph graph, int source, int target)
+    private double calculateAttractiveness(int source, int target)
     {
-        double influence = this.rand.nextFloat();
-
-        return Math.pow(graph.edgeWeight(source, target), influence)
-                * Math.pow(this.pheroMatrix[source][target], 1 - influence);
+        return (1.0 / this.graph.edgeWeight(source, target) * this.pheroMatrix[source][target]);
     }
 
     /**
@@ -280,9 +268,9 @@ public class CVRP
         return pheroMatrix;
     }
 
-    private String getPrintString(int stepCount, int shortestPathLength, List<List<Integer>> shortestPath)
+    private void printInfo(int stepCount, int shortestPathLength, List<List<Integer>> shortestPath)
     {
-        return String.format("Step %d, Length %d => Path %s", stepCount, shortestPathLength, shortestPath);
+        System.out.println(String.format("Step %d, Length %d => Path %s", stepCount, shortestPathLength, shortestPath));
     }
 
     private List<List<Integer>> splitPath(int start, List<Integer> path)

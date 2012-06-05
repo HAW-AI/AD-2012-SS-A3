@@ -72,6 +72,13 @@ public interface IAnt
      * @param vertex Index einer Ecke
      */
     void moveTo(int vertex);
+    
+    /**
+     * Fügt der Ameise einen ganzen Pfad hinzu.
+     * 
+     * @param path Liste der Kanten des Pfades
+     */
+    void addPath(List<Integer> path);
 
     /**
      * Liefert den Index der aktuellen Ecke zurück.
