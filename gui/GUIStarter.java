@@ -29,7 +29,7 @@ public class GUIStarter {
 	}
 	
 	public static void main(String[] args) {
-        IOManager iOManager = new IOManager("src/a3/file21.txt");
+        IOManager iOManager = new IOManager("src/a3/file7.txt");
         try {
 			IGraph graphT = new GraphImpl(iOManager.getEdgeWeightSection(), iOManager.getDemandSection());
 			CVRP test1 = new CVRP(graphT, 0);
