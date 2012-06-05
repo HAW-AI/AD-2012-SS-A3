@@ -71,7 +71,7 @@ public class FloydWarshall
                 if (col.equals(row))
                     value = 0d;
 
-                else if (this.g.edgeWeight(row, col) != 0)
+                else if (this.g.edgeWeight(row, col) > 0)
                     value = (double)this.g.edgeWeight(row, col);
 
                 else

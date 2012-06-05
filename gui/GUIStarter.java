@@ -16,8 +16,8 @@ import a3.IOManager;
  * Klasse zum Starten der GUI. Derzeitig noch keine interaktive Auswahl von Graphen.
  */
 public class GUIStarter {
-	private static final int ANTS = 1;
-	private static final int STEPS = 500;
+	private static final int ANTS = 2000;
+	private static final int STEPS = 5000;
 
 	public static void main_old(String[] args) {
 					// GraphFactory.createGraph(new IOManager("src/simGraph(10).txt").readGraphMatrixFromSimFile());
