@@ -1,18 +1,16 @@
+NAME
 DIMENSION : 4
+TYPE
 CAPACITY : 3
-
 EDGE_WEIGHT_SECTION
     0    5    -1    -1
     -1    0    3    -1
     7    -1    0    1
     -1    -1    -1    0
-
 DEMAND_SECTION
 0 0
 1 3
 2 1
 3 1
-
 EOF
-
 COMMENT : Der Weg von Ecke 2 nach Ecke 3 endet in einer Sackgasse => sollte nicht geladen werden
