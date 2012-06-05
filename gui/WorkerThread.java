@@ -1,6 +1,6 @@
 package gui;
 
-import a3.ACO;
+import a3.CVRP;
 import a3.IGraph;
 
 /**
@@ -9,7 +9,7 @@ import a3.IGraph;
  */
 public class WorkerThread extends Thread {
 	private final DrawPanel panel;
-	private final ACO algo;
+	private final CVRP algo;
 	private final IGraph graph;
 	
 	/**
@@ -18,7 +18,7 @@ public class WorkerThread extends Thread {
 	 * @param algo		ACO Algorithmus
 	 * @param graph		Graph auf dem der Pfad gesucht werden soll
 	 */
-	public WorkerThread(DrawPanel panel, ACO algo, IGraph graph) {
+	public WorkerThread(DrawPanel panel, CVRP algo, IGraph graph) {
 		this.panel = panel;
 		this.algo = algo;
 		this.graph = graph;

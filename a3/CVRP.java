@@ -21,17 +21,17 @@ public class CVRP
     double[][] pheroMatrix = null;
 
     /**
-     * Konstruktor des ACO Algorithmus.
+     * Konstruktor des CVRP Algorithmus.
      *
      * @param antCount Anzahl der maximal verwendeten Ameisen
      * @param steps	Anzahl der maximalen Schritte
      */
-    CVRP(IGraph graph, int start)
+    public CVRP(IGraph graph, int start)
     {
         this(graph, start, true, 100);
     }
 
-    CVRP(IGraph graph, int start, boolean outputInfo, int outputInterval)
+    public CVRP(IGraph graph, int start, boolean outputInfo, int outputInterval)
     {
         this.graph = graph;
         this.start = start;

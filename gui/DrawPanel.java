@@ -1,6 +1,8 @@
 package gui;
 
 
+import gui.ISOMGraphLayout;
+
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -11,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
 
-import a3.ACO;
+import a3.CVRP;
 import a3.IGraph;
 
 /**
@@ -24,7 +26,7 @@ public class DrawPanel extends JPanel implements Runnable, MouseListener, MouseM
     private static final int HEIGHT = 811;
     private static final int WIDTH = 1360;
     
-	private final ACO algo;
+	private final CVRP algo;
 	private final IGraph graph;
 	private final ISOMGraphLayout layout;
 	private final Thread thread;
@@ -45,7 +47,7 @@ public class DrawPanel extends JPanel implements Runnable, MouseListener, MouseM
 	 */
 	public DrawPanel(IGraph graph) {
 		this.graph = graph;
-		this.algo = new ACO(ANTS, STEPS);
+		this.algo = new CVRP(graph, STEPS);
 		this.layout = new ISOMGraphLayout(graph, 50 * graph.getNumberOfVertices(), WIDTH, HEIGHT, 50);
 		
 		// Algorithmenthread
