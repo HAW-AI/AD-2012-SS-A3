@@ -175,26 +175,7 @@ public class Test {
     	 
     	
 		System.out.println("Tests ueber I/O-Manager: /n");
-
-		/**
-		 * so vorgefunden:
-		 * */
-		// IOManager iOManager = new IOManager("src/a3/file21.txt");
-		// try {
-		// IGraph graphT = new GraphImpl(iOManager.getEdgeWeightSection(),
-		// iOManager.getDemandSection());
-		// test1 = new CVRP(graphT, 0);
-		// System.out.println("Graph T, Kapazitaet " +
-		// iOManager.getAntCapacity());
-		// path = test1.shortestPath(ANTS, iOManager.getAntCapacity(), STEPS);
-		// gesLaenge = 0;
-		// for(List<Integer> list : path){
-		// gesLaenge += graphT.getPathLength(list);
-		// }
-		// System.out.println(gesLaenge + " " + path);
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
+		
 
 		IOManager ioFile3 = new IOManager("src/a3/file3.txt");
 
