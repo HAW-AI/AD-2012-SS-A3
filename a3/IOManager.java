@@ -7,21 +7,58 @@ import java.io.IOException;
 
 /**
  * IOManager zum Laden von Graphen aus Dateien und zur Ausgabe von Logs.
-░░░░░▄▄▄▄▀▀▀▀▀▀▀▀▄▄▄▄▄▄░░░░░░░░
-░░░░░█░░░░▒▒▒▒▒▒▒▒▒▒▒▒░░▀▀▄░░░░
-░░░░█░░░▒▒▒▒▒▒░░░░░░░░▒▒▒░░█░░░
-░░░█░░░░░░▄██▀▄▄░░░░░▄▄▄░░░░█░░
-░▄▀▒▄▄▄▒░█▀▀▀▀▄▄█░░░██▄▄█░░░░█░
-█░▒█▒▄░▀▄▄▄▀░░░░░░░░█░░░▒▒▒▒▒░█
-█░▒█░█▀▄▄░░░░░█▀░░░░▀▄░░▄▀▀▀▄▒█
-░█░▀▄░█▄░█▀▄▄░▀░▀▀░▄▄▀░░░░█░░█░
-░░█░░░▀▄▀█▄▄░█▀▀▀▄▄▄▄▀▀█▀██░█░░
-░░░█░░░░██░░▀█▄▄▄█▄▄█▄████░█░░░
-░░░░█░░░░▀▀▄░█░░░█░█▀██████░█░░
-░░░░░▀▄░░░░░▀▀▄▄▄█▄█▄█▄█▄▀░░█░░
-░░░░░░░▀▄▄░▒▒▒▒░░░░░░░░░░▒░░░█░
-░░░░░░░░░░▀▀▄▄░▒▒▒▒▒▒▒▒▒▒░░░░█░
-░░░░░░░░░░░░░░▀▄▄▄▄▄░░░░░░░░█░░
+.......................................................................................... .........
+.......................................................................................... .........
+.................................@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@............. .........
+.........................@@@@@@@@@@@@@@@@..................................@@@@@.......... .........
+...................@@@@@@@@@@@..........@@@@@...............@@................@@@......... .........
+.................@@@@............................................@@.............@@@....... .........
+..............@@@@....@..@@@@@@............@@@..............@@......@............@@@...... .........
+............@@@@.................................................@@....@..........@@@..... .........
+...........@@@............@@@@@....................@..........@@@...@....@.........@@@.... .........
+..........@@...........@.........................@................@@...@....@.......@@@... .........
+..........@@.........@............@..................................@..@....@.......@@... .........
+..........@@........@..................................................@..@...........@@.. .........
+.........@@..........................................@@@@@@@@@@@@@@...................@@@. .........
+........@@@............@@@@@@@@...................@@@@@...@@@@@@@@@@@@.................@@@ .........
+....@@@@...........@@@@@@@@@@@@@@.............@@@@......@@@@@@@@..@@@..................@@@ .......
+...@@@...@@@@@.@@@.@@@@@@@@@@@@@@@...........@@@.....@@@@@@@@@@@@@@@@@....@....@@@@@@@@.@@ @@.....
+..@@...@..................@@@@@@@@@@@@@.......@@@@@@@@@...........@@...@.................. @@@....
+.@@..@...@@.....................@@@@...........@@@@@......@@@..............@@@@@@@@@@..... ..@@...
+.@@.@..@...@@@@@@................@@.........................@@@@.......@@@@@@......@@@@... .@.@@..
+.@@@.....@@@@@@@@@@....@.........@@...........................@@@@@@@@@@@.....@@.....@@@.. .@..@@@
+.@@@.....@.......@@@@@@@@........@@...........................................@@......@@.. .@..@@@
+.@@@..@.......@@..@@@@........@@@@.........................................@@@@@.......@@. .@...@@
+.@@....@......@@...........@@@@................@@@@@@@@................@@@@@...@@@@@@..@@. .@...@@
+.@@@@...@@..@@@@..........@@@@@....................@@..............@@@@@@.....@@@.@@@.@@@. .@..@@@
+..@@.@@.....@@@@.......@@..@@@@@.........@@@@@@@...@@..........@@@@@@@........@@......@@.. ....@@@
+..@@@....@..@@.@@@...@........@@@..............@.@@@......@@@@@@@@.@@.......@@@@.....@@... @..@@@.
+...@@@.....@@@@@@@@@............@@@@@@...............@@@@@@@@......@@....@@@@@@.........@@ ..@@...
+....@@@....@@.@@.@@@@@@...........@@@...........@@@@@@@@..........@@@.@@@@@@@@.......@.... .@@@...
+.....@@....@@@@..@@..@@@@@@@@........@@@@@@@@@@@@@@..@@..........@@@@@@@..@@@..........@@@ @@.....
+.....@@....@@@@..@@....@@@@@@@@@@@@@@@@@@@@..........@@......@@@@@@@@....@@@............@@ @......
+.....@@....@@@@..@@...@@@.......@@.......@@..........@@@.@@@@@@@@@.@@...@@@...........@@@. .......
+.....@@....@@@@@@@@...@@........@@.......@@.........@@@@@@@@@@@....@@..@@@...........@@@.. .......
+.....@@....@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.......@@@@@@............@@... .......
+.....@@....@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.@@...........@@@.............@@@... .......
+.....@@.....@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.......@@.........@@@..............@@@.... .......
+.....@@.....@@.@@@@@@@@@@@@@@@@@@@@@@@@@@@.@@..........@@@.....@@@@...............@@@..... .......
+.....@@......@@.@@..@@...@@.....@@@........@@...........@@...@@@@...............@@@....... .......
+.....@@......@@@@@@.@@@...@@.....@@........@@............@@@@@@................@@@........ .......
+.....@@.......@@@@...@@@..@@@....@@........@@.........@@@@@@.......@.....@...@@@.......... .......
+.....@@.........@@@@@@@@@..@@....@@@.......@@..@@@@@@@@@........@.....@@...@@@@........... .......
+.....@@..............@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.........@@....@@....@@@@ ...............
+....@@@........@..........................................@.....@@....@@@@@.. ..............
+....@@..........@....................................@@......@.....@@@@@..... ..............
+....@@............@..............................@@......@@.....@@@@@........ ..............
+..@@.....@@........@@@...........@@@@@@@@@@......@@.......@@@@@@....... ............
+.@@.........@.........................@@@............@@@@@...... ........
+.@@@..........@@@@@@@@@@@@@@@.....................@@@@@...... ....
+.@@@..........................................@@@@@...... ..
+..@@@...................................@@.@@@@@....... 
+...@@@@............................@@@@@@@@@@........ 
+....@@@@@...................@@@@@@@@@.............. 
+.......@@@@@@@@@@@@@@@@@@@@@@@@....................
  */
 public class IOManager {
 
@@ -135,12 +172,18 @@ public class IOManager {
         //Der Weg von Ecke 1 nach Ecke 2 endet in einer Sackgasse => sollte nicht geladen werden
 
         counter = 0; //um -1's zu zahlen
-        for (int i : edge_weight_section)
+        int j = 0;
+        for (int i : edge_weight_section) {
             if (i == -1)
                 counter++;
-        if (counter == dimension - 1) {
-            fehlerausgabe("Eine Sackgasse oder nichtzusammenhaendender Graph.");
-            System.exit(0);
+	        j++;
+	        if (j == dimension) {
+		        if (counter == j - 1) {
+		            fehlerausgabe("Eine Sackgasse oder nichtzusammenhaendender Graph.");
+		            System.exit(0);
+		        }
+	        	j = 0;
+	        }
         }
 
         //Kapazitaet von Ecke ist groesser als die Ameisenkapazitaet => sollte nicht geladen werden
@@ -161,132 +204,18 @@ public class IOManager {
      **********************************************/
     public int[] getEdgeWeightSection() {
     	return edge_weight_section;
-/*        int[] edgeDistance = null;
-        int[][] testAry = null;
-
-        try (BufferedReader br = new BufferedReader(new FileReader(new File(filePath)))) {
-            String line = br.readLine();
-
-            while (!(line = br.readLine()).equals("EOF")) {
-                if (line.equals("EDGE_WEIGHT_SECTION")) {
-                    edgeDistance = new int[getDimension() * getDimension()];
-                    testAry = new int[getDimension()][getDimension()];
-                    int index = 0;
-                    int j = 0;
-                    while (!(line = br.readLine()).equals("DEMAND_SECTION") && !line.equals("EOF")) {
-                        String unspaced = line.trim();
-                        String[] splited = unspaced.split("(\\s)+");
-                        for (int i = 0; i < splited.length; i++) {
-                            edgeDistance[index] = Integer.parseInt(splited[i].trim());
-                            index++;
-                            testAry[j][i] = Integer.parseInt(splited[i].trim());
-                        }
-                        j++;
-                    }
-                    break;
-                }
-            }
-            br.close();
-        } catch (IOException e) {
-            System.out.println("Fehler beim Lesen der Datei!");
-        }
-        //Der Weg von Ecke 1 nach Ecke 2 endet in einer Sackgasse => sollte nicht geladen werden
-
-        int counter = 0; //um -1's zu zahlen
-        for (int i = 0; i < testAry.length; i++) {
-            for (int j = 0; j < testAry.length; j++) {
-                if (testAry[i][j] == -1) {
-                    counter++;
-                }
-            }
-            if (counter == testAry.length - 1) {
-                fehlerausgabe("Eine Sackgasse oder nichtzusammenhaendender Graph.");
-                System.exit(0);
-            }
-            counter = 0;
-        }
-        return edgeDistance;*/
     }
 
     public int[] getDemandSection() {
     	return demand_section;
-    	/*
-        int[] edgeCapacity = null;
-
-        try (BufferedReader br = new BufferedReader(new FileReader(new File(filePath)))) {
-            String line = br.readLine();
-
-            while (!(line = br.readLine()).equals("EOF")) {
-
-                if (line.equals("DEMAND_SECTION")) {
-                    edgeCapacity = new int[getDimension()];
-                    int index = 0;
-                    while (!(line = br.readLine()).equals("EOF")) {
-                        String[] splited = line.split("(\\s)+");
-                        edgeCapacity[index] = Integer.parseInt(splited[1].trim());
-                        index++;
-                    }
-                    break;
-                }
-            }
-            br.close();
-        } catch (IOException e) {
-            System.out.println("Fehler beim Lesen der Datei!");
-        }
-        //Kapazitaet von Ecke ist groesser als die Ameisenkapazitaet => sollte nicht geladen werden
-        int capacity = getAntCapacity();
-        for (int customer : edgeCapacity) {
-            if (customer > capacity) {
-                fehlerausgabe("Die Kapazitaet des LKWs ist kleiner als die groesste Kapazitaet der Kunden.");
-                System.exit(0);
-            }
-        }
-        return edgeCapacity;
-        */
     }
 
     public int getDimension() {
     	return dimension;
-/*        int dimension = 0;
-        try (BufferedReader br = new BufferedReader(new FileReader(new File(filePath)))) {
-            String line = br.readLine();
-            while (!(line = br.readLine()).equals("EOF")) {
-
-                String[] splited = line.split(":");
-                splited[0] = splited[0].trim();
-
-                if (splited[0].equals("DIMENSION")) {
-                    dimension = Integer.parseInt(splited[1].trim());
-                }
-            }
-            br.close();
-        } catch (IOException e) {
-            System.out.println("Fehler beim Lesen der Datei!");
-        }
-        return dimension;*/
     }
 
     public int getAntCapacity() {
     	return capacity;
-/*        int ant = 0;
-
-        try (BufferedReader br = new BufferedReader(new FileReader(new File(filePath)))) {
-            String line = br.readLine();
-
-            while (!(line = br.readLine()).equals("EOF")) {
-                String[] splited = line.split(":");
-                splited[0] = splited[0].trim();
-
-                if (splited[0].equals("CAPACITY")) {
-                    ant = Integer.parseInt(splited[1].trim());
-                    break;
-                }
-            }
-            br.close();
-        } catch (IOException e) {
-            System.out.println("Fehler beim Lesen der Datei!");
-        }
-        return ant;*/
     }
 
     private void fehlerausgabe(String text) {
