@@ -11,7 +11,7 @@ import java.util.*;
  *
  * @author maiwald
  */
-public class FloydWarshall
+public class FloydWarshall implements IPathfinder
 {
     private final IGraph g;
     private final List<Integer> vertices;
@@ -32,6 +32,7 @@ public class FloydWarshall
         calculateShortestPaths();
     }
 
+    @Override
     public List<Integer> getShortestPath(int source, int target)
     {
         if (this.d.get(source).get(target) == Double.POSITIVE_INFINITY)

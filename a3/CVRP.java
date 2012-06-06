@@ -11,7 +11,7 @@ public class CVRP
     private final double VAPORIZE_RATE = 0.4;
     private final Random rand = new Random(1337);
     private final IGraph graph;
-    private final FloydWarshall pathfinder;
+    private final IPathfinder pathfinder;
     private final int start;
     private final boolean outputInfo;
     private final int outputInterval;
