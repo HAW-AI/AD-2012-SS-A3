@@ -1,3 +1,4 @@
+//Testdatei für die Graphen
 package a3;
 
 import java.util.List;
@@ -5,7 +6,7 @@ import java.util.List;
 public class Test {
 	
     private final static int STEPS = 500;
-    private final static int ANTS = 5000;
+    private final static int ANTS = 200;
     
     public static void main(String ... args) {
 
