@@ -88,7 +88,7 @@ public class CVRP
 
                 // der aktuelle Weg ist länger als der kürzeste, daher uninteressant.
                 // man könnte auch längere graphen für die pheromatrix ausprobieren, muss man mal sehen.
-                if (shortestPathLength < graph.getPathLength(ant.getPath()))
+                if (graph.getPathLength(ant.getPath()) > shortestPathLength)
                 {
                     ant.reset();
                 }
@@ -111,7 +111,9 @@ public class CVRP
                     if (newPathLength <= shortestPathLength)
                     {
                         if (newPathLength < shortestPathLength)
+                        {
                             tryCount = 0;
+                        }
 
                         shortestPath = new ArrayList(ant.getPath());
                         shortestPathLength = graph.getPathLength(shortestPath);
@@ -124,7 +126,7 @@ public class CVRP
                 }
 
                 int nextVertex = this.chooseNextVertex(ant);
-                
+
                 // der nächste Knoten (Kunde) hat mehr Bedarf als die Ameise bei sich trägt.
                 if (ant.getRemainingCustomers().contains(nextVertex) && graph.getDemandOfCustomer(nextVertex) > ant.getLoad())
                 {
@@ -163,7 +165,7 @@ public class CVRP
         // individuelle und summierte Attraktivität berechnen
         Map<Integer, Double> indivigualAttractiveness = new HashMap<Integer, Double>();
         double totalAttractiveness = 0.0;
-        
+
         for (int vertex : reachableVertices)
         {
             indivigualAttractiveness.put(vertex, calculateAttractiveness(ant.currentPosition(), vertex));
@@ -183,7 +185,9 @@ public class CVRP
         {
             probability += entry.getValue();
             if (probability >= random)
+            {
                 return entry.getKey();
+            }
         }
 
         return 0;
