@@ -1,6 +1,6 @@
-NAME
+NAME : bla
 DIMENSION : 4
-TYPE
+TYPE : bla
 CAPACITY : 3
 EDGE_WEIGHT_SECTION
     0     5    -1    -1
