@@ -1,4 +1,3 @@
-//Testdatei für die Graphen
 package a3;
 
 import java.util.List;
